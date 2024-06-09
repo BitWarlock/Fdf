@@ -40,7 +40,13 @@ typedef struct s_point
 	float x;
 	float y;
 	float z;
-}		point;
+}		t_point;
+
+typedef struct s_vertex
+{
+	t_point	point;
+	struct s_vertex	*next;
+}		t_vertex;
 
 typedef struct s_mlx
 {
@@ -52,13 +58,27 @@ typedef struct s_mlx
 	void    *mlx;
 	void    *win;
 	void    *img;
-	int     width;
-	int     height;
 	int     bpp;
 	int     end;
 	int     len;
+	int	rows;
+	int	cols;
+	int	color;
 	char    *addr;
-	point	*vec;
+	t_vertex	*points;
+	t_point		*coords;
 }		t_mlx;
+
+typedef struct s_bres
+{
+	int	x_step;
+	int	y_step;
+	int	dx;
+	int	dy;
+}		t_bres;
+
+// void	print_points(t_vertex *head);
+void	draw_line_bres(t_point a, t_point b, t_mlx *mlx);
+void rotate_vec(t_point *point, float x, float y, float z);
 
 #endif // ! FDF_H
