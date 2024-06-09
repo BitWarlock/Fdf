@@ -23,7 +23,7 @@ RM		= rm -rf
 all: $(EXE)
 
 $(EXE): $(LIBFT) $(OBJS)
-	$(CC) $(C_FLAGS) $(MLX) $^ -o $@
+	$(CC) $(C_FLAGS) -g $(MLX) $^ -o $@
 	@echo ""
 	@echo "\033[1;36m'fdf' is now ready."
 	@echo "Usage: ./fdf maps/<map>"

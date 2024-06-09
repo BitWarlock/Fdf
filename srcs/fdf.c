@@ -96,31 +96,63 @@ void	check_extension(char *str)
 		print_error(WRONG_EXT);
 }
 
+void	free_coor(t_point **points, int size)
+{
+	int	i;
+
+	i = 0;
+	// while (i < size)
+	// {
+	// 	free(points[i]);
+	// 	i++;
+	// }
+	free(*points);
+}
+
 void	ft_free_all(char **strs)
 {
 	int	i;
 
+	if (!strs)
+		return ;
 	i = -1;
 	while (strs[++i])
 		free(strs[i]);
 	free(strs);
 }
 
-void	free_vertex(t_vertex **points)
+void free_vertex(t_vertex **points)
 {
-	t_vertex	*next;
-	t_vertex	*tmp;
+	t_vertex *tmp;
+	t_vertex *next;
 
 	if (!(*points))
-		return ;
+		return;
 	tmp = *points;
-	while ((*points))
+	while (tmp)
 	{
-		next = (*points)->next;
-		free(*points);
-		*points = next;
+		next = tmp->next;
+		free(tmp);
+		tmp = next;
 	}
+	*points = NULL;
 }
+
+// void	free_vertex(t_vertex **points)
+// {
+// 	t_vertex	*next;
+// 	t_vertex	*tmp;
+//
+// 	if (!(*points))
+// 		return ;
+// 	tmp = *points;
+// 	while ((*points))
+// 	{
+// 		next = (*points)->next;
+// 		free(*points);
+// 		*points = next;
+// 	}
+// }
 
 void	add_to_vertex(t_vertex **head, int x, int y, int z)
 {
@@ -259,8 +291,10 @@ void	draw_grid(t_mlx *mlx)
 	x = mlx->rows;
 	y = -1;
 	while (++y + x < mlx->cols * mlx->rows)
-			draw_line_bres(points[y], points[y + x], mlx);
+		draw_line_bres(points[y], points[y + x], mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
+	free_vertex(&mlx->points);
+	// free(mlx->coords);
 }
 
 void	parse_map(char *map, t_mlx *mlx)
@@ -298,7 +332,7 @@ void	mlx_hooks(t_mlx *mlx)
 	mlx_key_hook(mlx->win, key, &mlx);
 }
 
-t_point	*get_values(t_mlx *mlx)
+void	get_values(t_mlx *mlx)
 {
 	t_point	*points;
 	int	i;
@@ -316,8 +350,6 @@ t_point	*get_values(t_mlx *mlx)
 		i++;
 	}
 	mlx->coords = points;
-	free_vertex((t_vertex **)points);
-	return (points);
 }
 
 void rotate_vec(t_point *point, float x, float y, float z)
@@ -385,8 +417,11 @@ void	rotate(int size, t_mlx *mlx)
 		mlx->coords[i].x += WIDTH / 2;
 		mlx->coords[i].y += HEIGHT / 2;
 	}
+	free(mlx->coords);
 }
-void	f(){system("leaks fdf");};
+void	f(){
+	system ("export MallocStackLogging=1");
+	system("leaks --noContent fdf");};
 
 int	main(int argc, char *argv[])
 {
@@ -402,7 +437,7 @@ int	main(int argc, char *argv[])
 	get_values(&mlx);
 	rotate(mlx.cols * mlx.rows, &mlx);
 	draw_grid(&mlx);
-	free_vertex(&mlx.points);
 	mlx_loop(mlx.mlx);
+
 	return (EXIT_SUCCESS);
 }
