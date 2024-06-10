@@ -1,4 +1,5 @@
 #include "/usr/local/include/mlx.h"
+#include <libc.h>
 
 typedef struct s_mlx
 {
@@ -21,20 +22,65 @@ typedef struct s_mlx
 	int	flash;
 	int	reflect;
 	char    *addr;
+	float	**arr;
 }       t_mlx;
 
+void	get_values(t_mlx *mlx)
+{
+	int	i;
+	float	**arr;
+
+	arr = malloc(sizeof(float *) * 6);
+	if (!arr)
+		exit(1);
+	for (int i = 0; i < 6; i++)
+		arr[i] = (float *)malloc(sizeof(float));
+	i = 0;
+	while (i < 6)
+	{
+		arr[i][0] = 7;
+		arr[i][1] = 8;
+		arr[i][2] = 9;
+		i++;
+	}
+	for (int i = 0; i < 6; i++)
+		printf("(%f, %f, %f)\n", arr[i][0], arr[i][1], arr[i][2]);
+	mlx->arr = arr;
+	// for (int i = 0; i < 6; i++)
+		// free(arr[i]);
+	// free(arr);
+}
+
+void	test(t_mlx *mlx)
+{
+	int	i;
+	float	**arr;
+
+	arr = malloc(sizeof(float *) * 6);
+	if (!arr)
+		exit(1);
+	for (int i = 0; i < 6; i++)
+		arr[i] = (float *)malloc(sizeof(float));
+	i = 0;
+	while (i < 6)
+	{
+		arr[i][0] = 7;
+		arr[i][1] = 8;
+		arr[i][2] = 9;
+		i++;
+	}
+	// for (int i = 0; i < 6; i++)
+	// 	free(mlx->arr[i]);
+	// free(mlx->arr);
+
+}
+void	f(){system("leaks a.out");};
 int	main(int argc, char *argv[])
 {
-	t_mlx	mlx;
+	t_mlx mlx;
+	atexit(f);
+	get_values(&mlx);
+	test(&mlx);
 
-	// init_mlx(&mlx);
-	// test_gr(&mlx);
-	mlx.mlx = mlx_init();
-	mlx.win = mlx_new_window(mlx.mlx, 800, 800, "Spinning cube");
-	mlx.img = mlx_new_image(mlx.mlx, 800, 800);
-	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bpp, &mlx.len, &mlx.end);
-	mlx_string_put(mlx.mlx, mlx.win, 100, 100, 0xFFFFFF, "ABC");
-	// mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
-	mlx_loop(mlx.mlx);
 	return (0);
 }

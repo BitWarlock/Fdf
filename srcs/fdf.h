@@ -25,6 +25,10 @@
 # define HEIGHT 1000
 # define WIDTH 1400
 
+# define X 0
+# define Y 1
+# define Z 2
+
 #include "../minilibx/mlx.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -55,6 +59,7 @@ typedef struct s_mlx
 	float	z_angle;
 	float	mid_x;
 	float	mid_y;
+	float	**xyz;
 	void    *mlx;
 	void    *win;
 	void    *img;

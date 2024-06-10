@@ -135,6 +135,7 @@ void free_vertex(t_vertex **points)
 		free(tmp);
 		tmp = next;
 	}
+	free(*points);
 	*points = NULL;
 }
 
@@ -271,30 +272,43 @@ void print_points(t_mlx *mlx)
 // 	}
 // 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
 // }
+
+void	free_arr(float **arr, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
 void	draw_grid(t_mlx *mlx)
 {
-	t_point	*points;
+	float	**points;
 	int	x;
 	int	y;
 	int	i;
 
-	points = mlx->coords;
+	points = mlx->xyz;
 	x = -1;
 	while (++x < mlx->cols * mlx->rows)
 	{
 		if (x % mlx->rows != 0)
-		{
-			// printf("(%f, %f)->(%f, %f)\n", points[x-1].x, points[x-1].y, points[x].x, points[x].y);
-			draw_line_bres(points[x - 1], points[x], mlx);
-		}
+			draw_line_bres((t_point){points[x - 1][0], points[x - 1][1]},
+			(t_point){points[x][0], points[x][1]}, mlx);
 	}
 	x = mlx->rows;
 	y = -1;
 	while (++y + x < mlx->cols * mlx->rows)
-		draw_line_bres(points[y], points[y + x], mlx);
+		draw_line_bres((t_point){points[y][0], points[y][1]},
+			(t_point){points[x + y][0], points[x + y][1]}, mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
-	free_vertex(&mlx->points);
-	// free(mlx->coords);
+	for (int i = 0; i < mlx->cols * mlx->rows; i++)
+		free(mlx->xyz[i]);
+	free_arr(mlx->xyz, mlx->cols * mlx->rows);
 }
 
 void	parse_map(char *map, t_mlx *mlx)
@@ -334,33 +348,62 @@ void	mlx_hooks(t_mlx *mlx)
 
 void	get_values(t_mlx *mlx)
 {
-	t_point	*points;
 	int	i;
+	float	**arr;
 
-	points = malloc(sizeof(t_point) * mlx->cols * mlx->rows);
-	if (!points)
-		exit(EXIT_FAILURE);
+	arr = malloc(sizeof(float *) * mlx->cols * mlx->rows);
+	if (!arr)
+		exit(1);
+	printf("%d\n", mlx->cols * mlx->rows);
+	for (int i = 0; i < mlx->cols * mlx->rows; i++)
+		arr[i] = (float *)malloc(sizeof(float));
 	i = 0;
-	while (i < mlx->cols * mlx->rows)
+	while (i < mlx->rows * mlx->cols)
 	{
-		points[i].x = mlx->points->point.x;
-		points[i].y = mlx->points->point.y;
-		points[i].z = mlx->points->point.z;
+		arr[i][0] = mlx->points->point.x;
+		arr[i][1] = mlx->points->point.y;
+		arr[i][2] = mlx->points->point.z;
 		mlx->points = mlx->points->next;
 		i++;
 	}
-	mlx->coords = points;
+	mlx->xyz = arr;
+	// i = 0;
+	// while (i < mlx->cols * mlx->rows)
+	// {
+	// 	free(arr[i]);
+	// 	i++;
+	// }
+	// free(arr);
+	free_arr(arr, mlx->cols * mlx->rows);
+	// free_arr(arr);
 }
+
+// void	get_values(t_mlx *mlx)
+// {
+// 	t_point	*points;
+// 	int	i;
+//
+// 	points = malloc(sizeof(t_point) * mlx->cols * mlx->rows);
+// 	if (!points)
+// 		exit(EXIT_FAILURE);
+// 	i = 0;
+// 	while (i < mlx->cols * mlx->rows)
+// 	{
+// 		points[i].x = mlx->points->point.x;
+// 		points[i].y = mlx->points->point.y;
+// 		points[i].z = mlx->points->point.z;
+// 		mlx->points = mlx->points->next;
+// 		i++;
+// 	}
+// 	mlx->coords = points;
+// }
 
 void rotate_vec(t_point *point, float x, float y, float z)
 {
 	float radX = x;
 	float radY = y;
 	float radZ = z;
-	// float newX = (point->x - point->y) * sqrt(2) / 2;
-	// float newY = (point->x + point->y) * sqrt(2) / 2 - point->z;
-	// point->x = newX;
-	// point->y = newY;
+
 	float cosX = cos(radX);
 	float sinX = sin(radX);
 	float newY = cosX * point->y - sinX * point->z;
@@ -375,30 +418,34 @@ void rotate_vec(t_point *point, float x, float y, float z)
 	point->x = newX;
 	point->z = newZ;
 
-	// float cosZ = cos(radZ);
-	// float sinZ = sin(radZ);
-	// newX = cosZ * point->x - sinZ * point->y;
-	// newY = sinZ * point->x + cosZ * point->y;
-	// point->x = newX;
-	// point->y = newY;
+	float cosZ = cos(radZ);
+	float sinZ = sin(radZ);
+	newX = cosZ * point->x - sinZ * point->y;
+	newY = sinZ * point->x + cosZ * point->y;
+	point->x = newX;
+	point->y = newY;
 }
 
-void rotate_for_iso_projection(t_point *point)
+void	rotate_for_iso_projection(float *point)
 {
-    float newX = (point->x - point->y) * sqrt(2) / 2;
-    float newY = (point->x + point->y) * sqrt(2) / 2 - point->z;
-    point->x = newX;
-    point->y = newY;
+	float	newX;
+	float	newY;
+
+	newX = (point[0] - point[1]) * sqrt(2) / 2;
+	newY = (point[0] + point[1]) * sqrt(2) / 2 - point[2];
+	point[0] = newX;
+	point[1] = newY;
 }
+
 void	rotate(int size, t_mlx *mlx)
 {
 	float	center_x = 0, center_y = 0, center_z = 0;
 
 	for (int i = 0; i < size; i++)
 	{
-		center_x += mlx->coords[i].x;
-		center_y += mlx->coords[i].y;
-		center_z += mlx->coords[i].z;
+		center_x += mlx->xyz[i][0];
+		center_y += mlx->xyz[i][1];
+		center_z += mlx->xyz[i][2];
 	}
 
 	center_x /= size;
@@ -406,22 +453,18 @@ void	rotate(int size, t_mlx *mlx)
 	center_z /= size;
 	for (int i = 0; i < size; i++)
 	{
-		mlx->coords[i].x -= center_x;
-		mlx->coords[i].y -= center_y;
-		mlx->coords[i].z -= center_z;
-
-		rotate_for_iso_projection(&mlx->coords[i]);
-		// rotate_vec(&mlx->coords[i], 45 * M_PI / 180, 45 * M_PI / 180, 0);
-		// rotate_vec(&mlx->coords[i], -(45 * M_PI / 180), (35 * M_PI / 180), 0);
-		printf("%f\n", mlx->coords[i].z);
-		mlx->coords[i].x += WIDTH / 2;
-		mlx->coords[i].y += HEIGHT / 2;
+		mlx->xyz[i][0] -= center_x;
+		mlx->xyz[i][1] -= center_y;
+		mlx->xyz[i][2] -= center_z;
+		rotate_for_iso_projection(mlx->xyz[i]);
+		mlx->xyz[i][0] += WIDTH / 2;
+		mlx->xyz[i][1] += HEIGHT / 2;
 	}
-	free(mlx->coords);
 }
+
 void	f(){
-	system ("export MallocStackLogging=1");
-	system("leaks --noContent fdf");};
+	// system ("export MallocStackLogging=1");
+	system("leaks -quiet fdf");};
 
 int	main(int argc, char *argv[])
 {
@@ -435,8 +478,9 @@ int	main(int argc, char *argv[])
 	mlx_hooks(&mlx);
 	parse_map(argv[1], &mlx);
 	get_values(&mlx);
-	rotate(mlx.cols * mlx.rows, &mlx);
-	draw_grid(&mlx);
+	free_vertex(&mlx.points);
+	// rotate(mlx.cols * mlx.rows, &mlx);
+	// draw_grid(&mlx);
 	mlx_loop(mlx.mlx);
 
 	return (EXIT_SUCCESS);
