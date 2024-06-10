@@ -12,60 +12,6 @@
 
 #include "fdf.h"
 
-char	*ft_strnew(size_t size)
-{
-	char	*str;
-
-	if (!(str = (char*)malloc(sizeof(*str) * (size + 1))))
-		return (NULL);
-	ft_bzero(str, size + 1);
-	return (str);
-}
-
-static int	count_size(int n)
-{
-	int i;
-
-	i = 0;
-	if (n < 0)
-		n *= -1;
-	while (n != 0)
-	{
-		n /= 10;
-		i++;
-	}
-	return (i);
-}
-
-char		*ft_itoa(int num)
-{
-	char		*dst;
-	int			count;
-	int			i;
-	long int	n;
-
-	n = num;
-	count = count_size(n);
-	i = 0;
-	if (n < 0 || count == 0)
-		count++;
-	if (!(dst = ft_strnew(count)))
-		return (NULL);
-	if (n < 0)
-	{
-		n *= -1;
-		dst[0] = '-';
-		i++;
-	}
-	while (count > i)
-	{
-		count--;
-		dst[count] = (n % 10) + '0';
-		n /= 10;
-	}
-	return (dst);
-}
-
 void clear_mlx(t_mlx *mlx)
 {
 	memset(mlx->addr, 0, WIDTH * HEIGHT * (mlx->bpp / 8));
@@ -96,19 +42,6 @@ void	check_extension(char *str)
 		print_error(WRONG_EXT);
 }
 
-void	free_coor(t_point **points, int size)
-{
-	int	i;
-
-	i = 0;
-	// while (i < size)
-	// {
-	// 	free(points[i]);
-	// 	i++;
-	// }
-	free(*points);
-}
-
 void	ft_free_all(char **strs)
 {
 	int	i;
@@ -117,43 +50,25 @@ void	ft_free_all(char **strs)
 		return ;
 	i = -1;
 	while (strs[++i])
+	{
 		free(strs[i]);
+		strs[i] = NULL;
+	}
 	free(strs);
+	strs = NULL;
 }
 
-void free_vertex(t_vertex **points)
+void free_vertex(t_vertex *head)
 {
 	t_vertex *tmp;
-	t_vertex *next;
 
-	if (!(*points))
-		return;
-	tmp = *points;
-	while (tmp)
+	while (head != NULL)
 	{
-		next = tmp->next;
+		tmp = head;
+		head = head->next;
 		free(tmp);
-		tmp = next;
 	}
-	free(*points);
-	*points = NULL;
 }
-
-// void	free_vertex(t_vertex **points)
-// {
-// 	t_vertex	*next;
-// 	t_vertex	*tmp;
-//
-// 	if (!(*points))
-// 		return ;
-// 	tmp = *points;
-// 	while ((*points))
-// 	{
-// 		next = (*points)->next;
-// 		free(*points);
-// 		*points = next;
-// 	}
-// }
 
 void	add_to_vertex(t_vertex **head, int x, int y, int z)
 {
@@ -183,11 +98,11 @@ void	add_to_vertex(t_vertex **head, int x, int y, int z)
 		new->point.z = (float)z;
 	}
 }
-
 void	get_coord(char *str, t_mlx *mlx, int cols)
 {
 	t_vertex	*last;
 	t_vertex	*new;
+	t_vertex	*current;
 	char		**strs;
 	int		rows;
 
@@ -207,7 +122,13 @@ void	get_coord(char *str, t_mlx *mlx, int cols)
 		last = mlx->points;
 		while (last->next)
 			last = last->next;
-		last->next = new;
+		current = new;
+		while (current)
+		{
+			last->next = current;
+			last = current;
+			current = current->next;
+		}
 	}
 	ft_free_all(strs);
 }
@@ -230,48 +151,6 @@ void print_points(t_mlx *mlx)
 		mlx_string_put(mlx->mlx, mlx->win, points[i].x, points[i].y, 0xFFFFFF, "P");
 	}
 }
-// void	print_points(t_mlx *mlx)
-// {
-// 	t_vertex	*points;
-// 	char	*str;
-// 	int	i = 0;
-//
-// 	points = mlx->points;
-// 	while(points)
-// 	{
-// 		str = ft_itoa(points->point.z);
-// 		// printf("Point %d: (%f, %f, %f)\n", i, points->point.x, points->point.y, points->point.z);
-// 		mlx_string_put(mlx->mlx, mlx->win, points->point.x, points->point.y, 0xFFFFFF, str);
-// 		points = points->next;
-// 		i++;
-// 	}
-// }
-
-// void draw_grid(t_mlx *mlx)
-// {
-// 	t_point *points;
-// 	int x;
-// 	int y;
-// 	int i;
-//
-// 	points = mlx->coords;
-// 	x = -1;
-// 	while (++x < mlx->cols * mlx->rows)
-// 	{
-// 		if (x % mlx->rows != 0)
-// 		{
-// 			draw_line_bres(points[x - 1], points[x], mlx);
-// 		}
-// 	}
-// 	x = 0;
-// 	y = 0;
-// 	while (y < mlx->rows)
-// 	{
-// 		draw_line_bres(points[y], points[y + mlx->rows], mlx);
-// 		y++;
-// 	}
-// 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
-// }
 
 void	free_arr(float **arr, int size)
 {
@@ -306,9 +185,9 @@ void	draw_grid(t_mlx *mlx)
 		draw_line_bres((t_point){points[y][0], points[y][1]},
 			(t_point){points[x + y][0], points[x + y][1]}, mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
-	for (int i = 0; i < mlx->cols * mlx->rows; i++)
-		free(mlx->xyz[i]);
-	free_arr(mlx->xyz, mlx->cols * mlx->rows);
+	// for (int i = 0; i < mlx->cols * mlx->rows; i++)
+		// free(mlx->xyz[i]);
+	// free_arr(mlx->xyz, mlx->cols * mlx->rows);
 }
 
 void	parse_map(char *map, t_mlx *mlx)
@@ -374,29 +253,10 @@ void	get_values(t_mlx *mlx)
 	// 	i++;
 	// }
 	// free(arr);
-	free_arr(arr, mlx->cols * mlx->rows);
+	// free_vertex(mlx->points);
+	// free_arr(arr, mlx->cols * mlx->rows);
 	// free_arr(arr);
 }
-
-// void	get_values(t_mlx *mlx)
-// {
-// 	t_point	*points;
-// 	int	i;
-//
-// 	points = malloc(sizeof(t_point) * mlx->cols * mlx->rows);
-// 	if (!points)
-// 		exit(EXIT_FAILURE);
-// 	i = 0;
-// 	while (i < mlx->cols * mlx->rows)
-// 	{
-// 		points[i].x = mlx->points->point.x;
-// 		points[i].y = mlx->points->point.y;
-// 		points[i].z = mlx->points->point.z;
-// 		mlx->points = mlx->points->next;
-// 		i++;
-// 	}
-// 	mlx->coords = points;
-// }
 
 void rotate_vec(t_point *point, float x, float y, float z)
 {
@@ -470,7 +330,7 @@ int	main(int argc, char *argv[])
 {
 	t_mlx	mlx;
 
-	atexit(f);
+	// atexit(f);
 	if (argc != 2)
 		print_error(INVALID_ARGS);
 	check_extension(argv[1]);
@@ -478,9 +338,8 @@ int	main(int argc, char *argv[])
 	mlx_hooks(&mlx);
 	parse_map(argv[1], &mlx);
 	get_values(&mlx);
-	free_vertex(&mlx.points);
-	// rotate(mlx.cols * mlx.rows, &mlx);
-	// draw_grid(&mlx);
+	rotate(mlx.cols * mlx.rows, &mlx);
+	draw_grid(&mlx);
 	mlx_loop(mlx.mlx);
 
 	return (EXIT_SUCCESS);
