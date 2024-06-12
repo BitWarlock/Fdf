@@ -14,7 +14,8 @@
 LIB_DIR		= ./libft
 HEADER		= srcs/fdf.h
 LIBFT		= $(LIB_DIR)/libft.a
-SRCS		= srcs/fdf.c srcs/Bresenham.c
+SRCS		= srcs/fdf.c srcs/Bresenham.c srcs/hooks.c \
+		  srcs/parse.c srcs/coordinates.c
 OBJS		= $(SRCS:.c=.o)
 MLX		=  -lmlx -framework OpenGL -framework AppKit
 EXE		= fdf

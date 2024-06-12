@@ -28,20 +28,6 @@ void	print_error(int error)
 	exit(EXIT_FAILURE);
 }
 
-void	check_extension(char *str)
-{
-	int	len;
-
-	len = ft_strlen(str);
-	if (str[len - 1] == 'f' &&
-		str[len - 2] == 'd' &&
-		str[len - 3] == 'f' &&
-		str[len - 4] == '.')
-			return ;
-	else
-		print_error(WRONG_EXT);
-}
-
 void	ft_free_all(char **strs)
 {
 	int	i;
@@ -70,69 +56,6 @@ void free_vertex(t_vertex *head)
 	}
 }
 
-void	add_to_vertex(t_vertex **head, int x, int y, int z)
-{
-	t_vertex	*new;
-	t_vertex	*last;
-
-	new = malloc(sizeof(t_vertex));
-	if (!new)
-		print_error(EIO);
-	if (!*head)
-	{
-		*head = new;
-		new->point.x = (float)x;
-		new->point.y = (float)y;
-		new->point.z = (float)z;
-		new->next = NULL;
-	}
-	else
-	{
-		last = *head;
-		while (last->next)
-			last = last->next;
-		last->next = new;
-		new->next = NULL;
-		new->point.x = (float)x;
-		new->point.y = (float)y;
-		new->point.z = (float)z;
-	}
-}
-void	get_coord(char *str, t_mlx *mlx, int cols)
-{
-	t_vertex	*last;
-	t_vertex	*new;
-	t_vertex	*current;
-	char		**strs;
-	int		rows;
-
-	strs = ft_split(str, ' ');
-	new = NULL;
-	rows = 0;
-	while (strs[rows])
-	{
-		add_to_vertex(&new, rows * 30, cols * 30, ft_atoi(strs[rows]) * 3);
-		rows++;
-	}
-	mlx->rows = rows;
-	if (mlx->points == NULL)
-		mlx->points = new;
-	else
-	{
-		last = mlx->points;
-		while (last->next)
-			last = last->next;
-		current = new;
-		while (current)
-		{
-			last->next = current;
-			last = current;
-			current = current->next;
-		}
-	}
-	ft_free_all(strs);
-}
-
 void	init_mlx(t_mlx *mlx)
 {
 	mlx->mlx = mlx_init();
@@ -140,7 +63,10 @@ void	init_mlx(t_mlx *mlx)
 	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->len, &mlx->end);
 	mlx->color = 0xFFFFFF;
+	mlx->mid_x = (float)WIDTH / 2;
+	mlx->mid_y = (float)HEIGHT / 2;
 }
+
 void print_points(t_mlx *mlx)
 {
 	t_point *points = mlx->coords;
@@ -164,98 +90,32 @@ void	free_arr(float **arr, int size)
 	}
 	free(arr);
 }
+void	draw_x(t_mlx *mlx)
+{
+	draw_line_bres((t_point){mlx->mid_x, 0}, (t_point){mlx->mid_x, HEIGHT}, mlx);
+	draw_line_bres((t_point){0, mlx->mid_y}, (t_point){WIDTH, mlx->mid_y}, mlx);
+}
+
 void	draw_grid(t_mlx *mlx)
 {
-	float	**points;
+	t_point	*points;
 	int	x;
 	int	y;
 	int	i;
 
-	points = mlx->xyz;
+	points = mlx->coords;
 	x = -1;
 	while (++x < mlx->cols * mlx->rows)
 	{
 		if (x % mlx->rows != 0)
-			draw_line_bres((t_point){points[x - 1][0], points[x - 1][1]},
-			(t_point){points[x][0], points[x][1]}, mlx);
+			draw_line_bres(points[x - 1], points[x], mlx);
 	}
 	x = mlx->rows;
 	y = -1;
 	while (++y + x < mlx->cols * mlx->rows)
-		draw_line_bres((t_point){points[y][0], points[y][1]},
-			(t_point){points[x + y][0], points[x + y][1]}, mlx);
+		draw_line_bres(points[y], points[y + x], mlx);
+	// draw_x(mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
-	// for (int i = 0; i < mlx->cols * mlx->rows; i++)
-		// free(mlx->xyz[i]);
-	// free_arr(mlx->xyz, mlx->cols * mlx->rows);
-}
-
-void	parse_map(char *map, t_mlx *mlx)
-{
-	char	*tmp = NULL;
-	int		fd;
-	int		cols;
-
-	fd = open(map, O_RDONLY);
-	if (fd < 0)
-		print_error(EIO);
-	cols = 0;
-	while (1)
-	{
-		tmp = get_next_line(fd);
-		if (!tmp)
-			break ;
-		get_coord(tmp, mlx, cols);
-		free(tmp);
-		cols++;
-	}
-	mlx->cols = cols;
-}
-
-int	key(int key, t_mlx *mlx)
-{
-	(void)mlx;
-	if (key == 53)
-		exit(EXIT_SUCCESS);
-	return (0);
-}
-
-void	mlx_hooks(t_mlx *mlx)
-{
-	mlx_key_hook(mlx->win, key, &mlx);
-}
-
-void	get_values(t_mlx *mlx)
-{
-	int	i;
-	float	**arr;
-
-	arr = malloc(sizeof(float *) * mlx->cols * mlx->rows);
-	if (!arr)
-		exit(1);
-	printf("%d\n", mlx->cols * mlx->rows);
-	for (int i = 0; i < mlx->cols * mlx->rows; i++)
-		arr[i] = (float *)malloc(sizeof(float));
-	i = 0;
-	while (i < mlx->rows * mlx->cols)
-	{
-		arr[i][0] = mlx->points->point.x;
-		arr[i][1] = mlx->points->point.y;
-		arr[i][2] = mlx->points->point.z;
-		mlx->points = mlx->points->next;
-		i++;
-	}
-	mlx->xyz = arr;
-	// i = 0;
-	// while (i < mlx->cols * mlx->rows)
-	// {
-	// 	free(arr[i]);
-	// 	i++;
-	// }
-	// free(arr);
-	// free_vertex(mlx->points);
-	// free_arr(arr, mlx->cols * mlx->rows);
-	// free_arr(arr);
 }
 
 void rotate_vec(t_point *point, float x, float y, float z)
@@ -286,39 +146,60 @@ void rotate_vec(t_point *point, float x, float y, float z)
 	point->y = newY;
 }
 
-void	rotate_for_iso_projection(float *point)
+void	rotate_for_iso_projection(t_point *point)
 {
 	float	newX;
 	float	newY;
 
-	newX = (point[0] - point[1]) * sqrt(2) / 2;
-	newY = (point[0] + point[1]) * sqrt(2) / 2 - point[2];
-	point[0] = newX;
-	point[1] = newY;
+	newX = (point->x - point->y) * sqrt(2) / 2;
+	newY = (point->x + point->y) * sqrt(2) / 2 - point->z;
+	point->x = newX;
+	point->y = newY;
+}
+
+void	translate(t_point *p, float tx, float ty, float tz)
+{
+	p->x += tx;
+	p->y += ty;
+	p->z += tz;
+}
+
+void	centroid(t_point *points, int size, t_mlx *mlx)
+{
+	float	center_x;
+	float	center_y;
+	float	center_z;
+	int	i;
+
+	center_x = 0;
+	center_y = 0;
+	center_z = 0;
+	i = 0;
+	while (i < size)
+	{
+		center_x += points[i].x;
+		center_y += points[i].y;
+		center_z += points[i].z;
+		i++;
+	}
+	mlx->centroid.x = center_x / size;
+	mlx->centroid.y = center_y / size;
+	mlx->centroid.z = center_z / size;
 }
 
 void	rotate(int size, t_mlx *mlx)
 {
-	float	center_x = 0, center_y = 0, center_z = 0;
+	int	i;
 
-	for (int i = 0; i < size; i++)
+	i = 0;
+	centroid(mlx->coords, size, mlx);
+	while (i < size)
 	{
-		center_x += mlx->xyz[i][0];
-		center_y += mlx->xyz[i][1];
-		center_z += mlx->xyz[i][2];
-	}
-
-	center_x /= size;
-	center_y /= size;
-	center_z /= size;
-	for (int i = 0; i < size; i++)
-	{
-		mlx->xyz[i][0] -= center_x;
-		mlx->xyz[i][1] -= center_y;
-		mlx->xyz[i][2] -= center_z;
-		rotate_for_iso_projection(mlx->xyz[i]);
-		mlx->xyz[i][0] += WIDTH / 2;
-		mlx->xyz[i][1] += HEIGHT / 2;
+		translate(&mlx->coords[i], -mlx->centroid.x, -mlx->centroid.y, -mlx->centroid.z);
+		rotate_for_iso_projection(&mlx->coords[i]);
+		mlx->coords[i].x += mlx->mid_x;
+		mlx->coords[i].y += mlx->mid_y;
+		i++;
 	}
 }
 

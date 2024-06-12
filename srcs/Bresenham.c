@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:07:13 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/07 17:07:17 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/11 03:35:51 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,89 +23,80 @@ void	draw_pixel(t_mlx *mlx, int x, int y, int color)
 	}
 }
 
-static int	_abs(int a)
+static float	_abs(float a)
 {
 	if (a < 0)
 		return (-a);
 	return (a);
 }
 
-static void	horizontal_line(t_mlx *mlx, t_point a, t_point b, t_bres line)
+static void	init_vars_bres(t_bres *line, t_point a, t_point b)
 {
-	int	p;
-
-	p = 2 * line.dy - line.dx;
-	while (a.x <= b.x)
-	{
-		draw_pixel(mlx, a.x, a.y, mlx->color);
-		a.x += line.x_step;
-		if (p < 0)
-			p += 2 * line.dy;
-		else
-		{
-			a.y += line.y_step;
-			p += 2 * (line.dy - line.dx);
-		}
-	}
+	line->x0 = a.x;
+	line->x1 = b.x;
+	line->y0 = a.y;
+	line->y1 = b.y;
+	line->dx = _abs(line->x1 - line->x0);
+	line->dy = -_abs(line->y1 - line->y0);
+	if (a.x < b.x)
+		line->x_step = 1;
+	else
+		line->x_step = -1;
+	if (a.y < b.y)
+		line->y_step = 1;
+	else
+		line->y_step = -1;
+	if (line->dx >= line->dy)
+		line->err = line->dx / 2;
+	else
+		line->err = -line->dy / 2;
 }
 
-static void	vertical_line(t_mlx *mlx, t_point a, t_point b, t_bres line)
-{
-	int	p;
-
-	p = 2 * line.dx - line.dy;
-	while (a.y <= b.y)
-	{
-		draw_pixel(mlx, a.x, a.y, mlx->color);
-		a.y += line.y_step;
-		if (p < 0)
-			p += 2 * line.dx;
-		else
-		{
-			a.x += line.x_step;
-			p += 2 * (line.dx - line.dy);
-		}
-	}
-}
 void	draw_line_bres(t_point a, t_point b, t_mlx *mlx)
 {
-	int x0 = a.x;
-	int x1 = b.x;
-	int y0 = a.y;
-	int y1 = b.y;
-	int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
-	int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
-	int err = dx + dy, e2; /* error value e_xy */
+	t_bres	line;
+	int		e2;
+	int		err;
 
-	for (;;){  /* loop */
-		draw_pixel (mlx, x0,y0, mlx->color);
-		if (x0 == x1 && y0 == y1) break;
+	init_vars_bres(&line, a, b);
+	err = line.dx + line.dy;
+	while (1)
+	{
+		draw_pixel(mlx, line.x0, line.y0, mlx->color);
+		if (line.x0 == line.x1 && line.y0 == line.y1)
+			break ;
 		e2 = 2 * err;
-		if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
-		if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+		if (e2 >= line.dy)
+		{
+			err += line.dy;
+			line.x0 += line.x_step;
+		}
+		if (e2 <= line.dx)
+		{
+			err += line.dx;
+			line.y0 += line.y_step;
+		}
 	}
 }
+//
 // void	draw_line_bres(t_point a, t_point b, t_mlx *mlx)
 // {
-// 	t_bres	line;
+// 	int x0 = a.x;
+// 	int x1 = b.x;
+// 	int y0 = a.y;
+// 	int y1 = b.y;
+// 	int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
+// 	int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
+// 	int err = dx + dy, e2; /* error value e_xy */
 //
-// 	printf("Line from (%f, %f) to (%f, %f)\n", a.x, a.y, b.x, b.y);
-// 	line.dx = _abs(b.x - a.x);
-// 	line.dy = _abs(b.y - a.y);
-// 	if (a.x < b.x)
-// 		line.x_step = 1;
-// 	else
-// 		line.x_step = -1;
-// 	if (a.y < b.y)
-// 		line.y_step = 1;
-// 	else
-// 		line.y_step = -1;
-// 	if (line.dx >= line.dy)
-// 		horizontal_line(mlx, a, b, line);
-// 	else
-// 		vertical_line(mlx, a, b, line);
+// 	for (;;){  /* loop */
+// 		draw_pixel (mlx, x0,y0, mlx->color);
+// 		if (x0 == x1 && y0 == y1) break;
+// 		e2 = 2 * err;
+// 		if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+// 		if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+// 	}
 // }
-
 // void	init_mlx(t_mlx *mlx)
 // {
 // 	mlx->mlx = mlx_init();
