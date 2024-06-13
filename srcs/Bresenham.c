@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:07:13 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/11 03:35:51 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/13 05:52:01 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	draw_pixel(t_mlx *mlx, int x, int y, int color)
 	}
 }
 
-static float	_abs(float a)
+float	_abs(float a)
 {
 	if (a < 0)
 		return (-a);

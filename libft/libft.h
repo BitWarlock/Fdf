@@ -107,7 +107,7 @@ int		print_unsigned(unsigned int n);
 # endif
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 69
+#  define BUFFER_SIZE 2147483647
 # endif
 
 int		locate(char *s);

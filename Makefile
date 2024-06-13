@@ -15,7 +15,8 @@ LIB_DIR		= ./libft
 HEADER		= srcs/fdf.h
 LIBFT		= $(LIB_DIR)/libft.a
 SRCS		= srcs/fdf.c srcs/Bresenham.c srcs/hooks.c \
-		  srcs/parse.c srcs/coordinates.c
+		  srcs/parse.c srcs/coordinates.c srcs/rotation.c \
+		  srcs/math.c srcs/draw.c srcs/free.c
 OBJS		= $(SRCS:.c=.o)
 MLX		=  -lmlx -framework OpenGL -framework AppKit
 EXE		= fdf
@@ -47,7 +48,7 @@ clean:
 	@echo ""
 
 fclean: clean
-	$(RM) $(LIBFT) $(PROG) a.out .DS_Store
+	$(RM) $(LIBFT) $(EXE) a.out a.out.dSYM.DS_Store
 	$(MAKE) -C libft/ fclean
 	@echo ""
 	@echo "\033[38;2;188;31;54mFull Cleanup Complete."

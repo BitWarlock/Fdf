@@ -1,0 +1,42 @@
+10-2.fdf
+      10
+10-70.fdf
+      10
+100-6.fdf
+     100
+20-60.fdf
+      20
+42.fdf
+      11
+50-4.fdf
+      50
+basictest.fdf
+       9
+elem-col.fdf
+      10
+elem-fract.fdf
+     500
+elem.fdf
+      10
+elem2.fdf
+      20
+julia.fdf
+     500
+mars.fdf
+     116
+pentenegpos.fdf
+       9
+plat.fdf
+      13
+pnp_flat.fdf
+       9
+pylone.fdf
+      47
+pyra.fdf
+      27
+pyramide.fdf
+      33
+t1.fdf
+     200
+t2.fdf
+     100

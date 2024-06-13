@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 03:35:33 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/11 03:35:35 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/13 05:52:29 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,21 @@ void	add_to_vertex(t_vertex **head, int x, int y, int z)
 		new->point.z = (float)z;
 	}
 }
+
 void	get_coord(char *str, t_mlx *mlx, int cols)
 {
 	t_vertex	*last;
 	t_vertex	*new;
 	t_vertex	*current;
 	char		**strs;
-	int		rows;
+	int			rows;
 
 	strs = ft_split(str, ' ');
 	new = NULL;
 	rows = 0;
 	while (strs[rows])
 	{
-		add_to_vertex(&new, rows * 30, cols * 30, ft_atoi(strs[rows]) * 3);
+		add_to_vertex(&new, rows, cols, ft_atoi(strs[rows]));
 		rows++;
 	}
 	mlx->rows = rows;
@@ -105,4 +106,3 @@ void	get_coord(char *str, t_mlx *mlx, int cols)
 	}
 	ft_free_all(strs);
 }
-
