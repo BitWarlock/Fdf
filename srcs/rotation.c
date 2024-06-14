@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 23:12:36 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/13 05:52:33 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/14 03:38:35 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,6 @@ void	rotate_for_iso_projection(t_point *point)
 	newy = (point->x + point->y) * sqrt(2) / 2 - point->z;
 	point->x = newx;
 	point->y = newy;
-}
-
-void	translate(t_point *p, float tx, float ty, float tz)
-{
-	p->x += tx;
-	p->y += ty;
-	p->z += tz;
 }
 
 void	centroid(t_point *points, int size, t_mlx *mlx)

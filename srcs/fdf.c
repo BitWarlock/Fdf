@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:07:29 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/13 05:52:13 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/14 03:38:14 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_mlx(t_mlx *mlx)
 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "FDF");
 	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->len, &mlx->end);
-	mlx->color = 0xFFFFFF;
+	mlx->color = 0x66ffff;
 	mlx->mid_x = (float)WIDTH / 2;
 	mlx->mid_y = (float)HEIGHT / 2;
 }
@@ -67,11 +67,11 @@ int	main(int argc, char *argv[])
 		print_error(INVALID_ARGS);
 	check_extension(argv[1]);
 	init_mlx(&mlx);
-	mlx_hooks(&mlx);
 	parse_map(argv[1], &mlx);
 	get_values(&mlx);
 	rotate(mlx.cols * mlx.rows, &mlx);
 	draw_grid(&mlx);
+	mlx_hooks(&mlx);
 	mlx_loop(mlx.mlx);
 	return (EXIT_SUCCESS);
 }

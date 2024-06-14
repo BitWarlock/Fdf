@@ -1,46 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/13 06:28:32 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/14 03:38:21 by mrezki           ###   ########.fr       */
+/*   Created: 2024/06/14 03:40:28 by mrezki            #+#    #+#             */
+/*   Updated: 2024/06/14 03:40:29 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	ft_free_all(char **strs)
+int	search_comma(char *str)
 {
-	int	i;
-
-	if (!strs)
-		return ;
-	i = -1;
-	while (strs[++i])
+	while (*str)
 	{
-		free(strs[i]);
-		strs[i] = NULL;
+		if (*str == ',')
+			return (1);
+		str++;
 	}
-	free(strs);
-	strs = NULL;
+	return (0);
 }
 
-void	free_vertex(t_vertex *head)
+int	get_color(char *str)
 {
-	t_vertex	*tmp;
+	char	**strs;
+	int		color;
 
-	while (head != NULL)
+	if (search_comma(str))
 	{
-		tmp = head;
-		head = head->next;
-		free(tmp);
+		strs = ft_split(str, ',');
+		color = atoi_base(strs[1], 16);
+		ft_free_all(strs);
+		return (color);
 	}
-}
-
-void	clear_mlx(t_mlx *mlx)
-{
-	ft_memset(mlx->addr, 0, WIDTH * HEIGHT * (mlx->bpp / 8));
+	return (0xFFFFFF);
 }

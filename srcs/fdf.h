@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 21:22:49 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/13 05:52:18 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/14 03:38:17 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,29 @@
 
 /* Error Codes */
 
-# define INVALID_ARGS 30
-# define WRONG_EXT 31
+# define INVALID_ARGS	30
+# define WRONG_EXT	31
 
 /* Colors */
 
-# define RED "\033[31m"
+# define RED		"\033[31m"
+
+/* Key events */
+
+# define UP		126
+# define DOWN		125
+# define LEFT		123
+# define RIGHT		124
+# define ESC		53
+# define N_PLUS		69
+# define N_MINUS	78
+# define M_PLUS		24
+# define M_MINUS	27
 
 # define HEIGHT 1000
 # define WIDTH 1400
 
-# define X 0
-# define Y 1
-# define Z 2
-
-# include "../minilibx/mlx.h"
+#include "/usr/local/include/mlx.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
@@ -44,6 +52,7 @@ typedef struct s_point
 	float	x;
 	float	y;
 	float	z;
+	int		color;
 }		t_point;
 
 typedef struct s_vertex
@@ -52,14 +61,25 @@ typedef struct s_vertex
 	t_point			point;
 }		t_vertex;
 
+typedef struct s_bres
+{
+	int	x0;
+	int	x1;
+	int	y0;
+	int	y1;
+	int	x_step;
+	int	y_step;
+	int	dx;
+	int	dy;
+	int	err;
+	int	*c;
+}		t_bres;
+
 typedef struct s_mlx
 {
 	t_vertex	*points;
 	t_point		*coords;
 	t_point		centroid;
-	float		x_angle;
-	float		y_angle;
-	float		z_angle;
 	float		mid_x;
 	float		mid_y;
 	void		*mlx;
@@ -74,24 +94,13 @@ typedef struct s_mlx
 	int			color;
 }		t_mlx;
 
-typedef struct s_bres
-{
-	int	x0;
-	int	x1;
-	int	y0;
-	int	y1;
-	int	x_step;
-	int	y_step;
-	int	dx;
-	int	dy;
-	int	err;
-}		t_bres;
-
 void	scale_up(t_point *points, float scale, t_mlx *mlx, float z);
+void	translate_shape(t_mlx *mlx, float tx, float ty, float tz);
 void	rotate_xyz(t_point *point, float x, float y, float z);
-void	add_to_vertex(t_vertex **head, int x, int y, int z);
+void	add_to_vertex(t_vertex **head, int x, int y, char *z);
 void	translate(t_point *p, float tx, float ty, float tz);
 void	draw_line_bres(t_point a, t_point b, t_mlx *mlx);
+void	draw_pixel(t_mlx *mlx, int x, int y, int color);
 void	centroid(t_point *points, int size, t_mlx *mlx);
 void	get_coord(char *str, t_mlx *mlx, int cols);
 void	rotate_for_iso_projection(t_point *point);
@@ -104,7 +113,9 @@ void	print_error(int error);
 void	get_values(t_mlx *mlx);
 void	draw_grid(t_mlx *mlx);
 void	mlx_hooks(t_mlx *mlx);
+void	scale_down(t_mlx *mlx);
 void	clear_mlx(t_mlx *mlx);
+void	scale(t_mlx *mlx);
 
 float	get_scale(int size, t_mlx *mlx);
 float	max_z(t_point *p, int size);
@@ -112,5 +123,7 @@ float	min_z(t_point *p, int size);
 float	min(float a, float b);
 float	max(float a, float b);
 float	_abs(float a);
+
+int		get_color(char *str);
 
 #endif // ! FDF_H

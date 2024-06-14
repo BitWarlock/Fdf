@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 05:52:08 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/13 05:52:09 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/14 03:38:10 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@ void	draw_x(t_mlx *mlx)
 		(t_point){WIDTH, mlx->mid_y}, mlx);
 }
 
+void	draw_pixel(t_mlx *mlx, int x, int y, int color)
+{
+	char	*add;
+
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	{
+		add = mlx->addr + (y * mlx->len + x * (mlx->bpp / 8));
+		*(unsigned int *)add = color;
+	}
+}
+
 void	draw_grid(t_mlx *mlx)
 {
 	t_point	*points;
@@ -27,6 +38,7 @@ void	draw_grid(t_mlx *mlx)
 	int		y;
 	int		i;
 
+	clear_mlx(mlx);
 	points = mlx->coords;
 	x = -1;
 	while (++x < mlx->cols * mlx->rows)

@@ -6,7 +6,7 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 03:35:33 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/13 05:52:29 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/14 03:38:31 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	parse_map(char *map, t_mlx *mlx)
 	mlx->cols = cols;
 }
 
-void	add_to_vertex(t_vertex **head, int x, int y, int z)
+void	add_to_vertex(t_vertex **head, int x, int y, char *z)
 {
 	t_vertex	*new;
 	t_vertex	*last;
@@ -57,52 +57,18 @@ void	add_to_vertex(t_vertex **head, int x, int y, int z)
 	new = malloc(sizeof(t_vertex));
 	if (!new)
 		print_error(EIO);
+	new->point.x = (float)x;
+	new->point.y = (float)y;
+	new->point.z = (float)ft_atoi(z);
+	new->point.color = get_color(z);
+	new->next = NULL;
 	if (!*head)
-	{
 		*head = new;
-		new->point.x = (float)x;
-		new->point.y = (float)y;
-		new->point.z = (float)z;
-		new->next = NULL;
-	}
 	else
 	{
 		last = *head;
 		while (last->next)
 			last = last->next;
 		last->next = new;
-		new->next = NULL;
-		new->point.x = (float)x;
-		new->point.y = (float)y;
-		new->point.z = (float)z;
 	}
-}
-
-void	get_coord(char *str, t_mlx *mlx, int cols)
-{
-	t_vertex	*last;
-	t_vertex	*new;
-	t_vertex	*current;
-	char		**strs;
-	int			rows;
-
-	strs = ft_split(str, ' ');
-	new = NULL;
-	rows = 0;
-	while (strs[rows])
-	{
-		add_to_vertex(&new, rows, cols, ft_atoi(strs[rows]));
-		rows++;
-	}
-	mlx->rows = rows;
-	if (mlx->points == NULL)
-		mlx->points = new;
-	else
-	{
-		last = mlx->points;
-		while (last->next)
-			last = last->next;
-		last->next = new;
-	}
-	ft_free_all(strs);
 }

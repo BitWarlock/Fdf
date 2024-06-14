@@ -6,22 +6,11 @@
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:07:13 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/13 05:52:01 by mrezki           ###   ########.fr       */
+/*   Updated: 2024/06/14 03:37:57 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-void	draw_pixel(t_mlx *mlx, int x, int y, int color)
-{
-	char	*add;
-
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-	{
-		add = mlx->addr + (y * mlx->len + x * (mlx->bpp / 8));
-		*(unsigned int *)add = color;
-	}
-}
 
 float	_abs(float a)
 {
@@ -62,7 +51,7 @@ void	draw_line_bres(t_point a, t_point b, t_mlx *mlx)
 	err = line.dx + line.dy;
 	while (1)
 	{
-		draw_pixel(mlx, line.x0, line.y0, mlx->color);
+		draw_pixel(mlx, line.x0, line.y0, a.color);
 		if (line.x0 == line.x1 && line.y0 == line.y1)
 			break ;
 		e2 = 2 * err;
