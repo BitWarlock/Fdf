@@ -12,14 +12,6 @@
 
 #include "fdf.h"
 
-void	draw_x(t_mlx *mlx)
-{
-	draw_line_bres((t_point){mlx->mid_x, 0},
-		(t_point){mlx->mid_x, HEIGHT}, mlx);
-	draw_line_bres((t_point){0, mlx->mid_y},
-		(t_point){WIDTH, mlx->mid_y}, mlx);
-}
-
 void	draw_pixel(t_mlx *mlx, int x, int y, int color)
 {
 	char	*add;

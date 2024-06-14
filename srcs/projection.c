@@ -1,48 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   translation.c                                      :+:      :+:    :+:   */
+/*   projection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/14 03:38:37 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/14 03:38:38 by mrezki           ###   ########.fr       */
+/*   Created: 2024/06/14 09:09:56 by mrezki            #+#    #+#             */
+/*   Updated: 2024/06/14 09:09:57 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	scale(t_mlx *mlx, float scale_)
+void	parallel_projection(t_point *point)
+{
+	float	oldx;
+	float	oldy;
+
+	oldy = point->y;
+	oldx = point->x;
+	point->x = (oldx * sqrt(2) + oldy * sqrt(2)) / 2;
+	point->y = (-oldx * sqrt(2) + oldy * sqrt(2)) / 2;
+	point->z = oldy - (point->x + point->y) / sqrt(2);
+}
+
+void	iso_projection(t_point *point)
+{
+	float	newx;
+	float	newy;
+
+	newx = (point->x - point->y) * sqrt(2) / 2;
+	newy = (point->x + point->y) * sqrt(2) / 2 - point->z;
+	point->x = newx;
+	point->y = newy;
+}
+
+void	parallel(t_mlx *mlx)
 {
 	int	i;
 
-	i = -1;
-	while (++i < mlx->cols * mlx->rows)
+	i = 0;
+	while (i < mlx->rows * mlx->cols)
 	{
 		mlx->coords[i].x -= mlx->mid_x;
 		mlx->coords[i].y -= mlx->mid_y;
-		mlx->coords[i].x *= scale_;
-		mlx->coords[i].y *= scale_;
-		mlx->coords[i].z *= scale_;
+		parallel_projection(&mlx->coords[i]);
 		mlx->coords[i].x += mlx->mid_x;
 		mlx->coords[i].y += mlx->mid_y;
+		i++;
 	}
 	draw_grid(mlx);
-}
-
-void	translate_shape(t_mlx *mlx, float tx, float ty, float tz)
-{
-	int	i;
-
-	i = -1;
-	while (++i < mlx->cols * mlx->rows)
-		translate(&mlx->coords[i], tx, ty, tz);
-	draw_grid(mlx);
-}
-
-void	translate(t_point *p, float tx, float ty, float tz)
-{
-	p->x += tx;
-	p->y += ty;
-	p->z += tz;
 }

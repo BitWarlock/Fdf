@@ -12,17 +12,6 @@
 
 #include "fdf.h"
 
-void	rotate_for_iso_projection(t_point *point)
-{
-	float	newx;
-	float	newy;
-
-	newx = (point->x - point->y) * sqrt(2) / 2;
-	newy = (point->x + point->y) * sqrt(2) / 2 - point->z;
-	point->x = newx;
-	point->y = newy;
-}
-
 void	centroid(t_point *points, int size, t_mlx *mlx)
 {
 	float	center_x;
@@ -65,14 +54,34 @@ void	rotate(int size, t_mlx *mlx)
 		z = 1;
 	if (z > 100)
 		z /= 100;
+	if (size > 20000)
+		z = 10;
 	while (i < size)
 	{
 		translate(&mlx->coords[i], -mlx->centroid.x,
 			-mlx->centroid.y, -mlx->centroid.z);
 		scale_up(&mlx->coords[i], get_scale(size, mlx), mlx, z);
-		rotate_for_iso_projection(&mlx->coords[i]);
+		iso_projection(&mlx->coords[i]);
 		mlx->coords[i].x += mlx->mid_x;
 		mlx->coords[i].y += mlx->mid_y;
 		i++;
 	}
+}
+
+void	rotate_shape(t_mlx *mlx, float x, float y, float z)
+{
+	int	i;
+
+	i = 0;
+	centroid(mlx->coords, mlx->cols * mlx->rows, mlx);
+	while (i < mlx->rows * mlx->cols)
+	{
+		translate(&mlx->coords[i], -mlx->centroid.x,
+			-mlx->centroid.y, -mlx->centroid.z);
+		rotate_xyz(&mlx->coords[i], x, y, z);
+		mlx->coords[i].x += mlx->mid_x;
+		mlx->coords[i].y += mlx->mid_y;
+		i++;
+	}
+	draw_grid(mlx);
 }

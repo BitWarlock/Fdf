@@ -17,7 +17,7 @@ LIBFT		= $(LIB_DIR)/libft.a
 SRCS		= srcs/fdf.c srcs/Bresenham.c srcs/hooks.c \
 		  srcs/parse.c srcs/coordinates.c srcs/rotation.c \
 		  srcs/math.c srcs/draw.c srcs/free.c srcs/translation.c \
-		  srcs/color.c
+		  srcs/color.c srcs/projection.c
 OBJS		= $(SRCS:.c=.o)
 MLX		=  -lmlx -framework OpenGL -framework AppKit
 EXE		= fdf

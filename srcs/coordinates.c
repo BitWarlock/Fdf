@@ -20,7 +20,7 @@ void	get_values(t_mlx *mlx)
 
 	points = malloc(sizeof(t_point) * mlx->cols * mlx->rows);
 	if (!points)
-		exit(EXIT_FAILURE);
+		print_error(EIO);
 	i = 0;
 	head = mlx->points;
 	while (i < mlx->cols * mlx->rows)

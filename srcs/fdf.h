@@ -33,11 +33,16 @@
 # define N_MINUS	78
 # define M_PLUS		24
 # define M_MINUS	27
+# define X_KEY		7
+# define Y_KEY		16
+# define R_KEY		15
+# define Z_KEY		6
+# define P_KEY		35
 
 # define HEIGHT 1000
 # define WIDTH 1400
 
-#include "/usr/local/include/mlx.h"
+# include "/usr/local/include/mlx.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
@@ -98,24 +103,26 @@ void	scale_up(t_point *points, float scale, t_mlx *mlx, float z);
 void	translate_shape(t_mlx *mlx, float tx, float ty, float tz);
 void	rotate_xyz(t_point *point, float x, float y, float z);
 void	add_to_vertex(t_vertex **head, int x, int y, char *z);
+void	rotate_shape(t_mlx *mlx, float x, float y, float z);
 void	translate(t_point *p, float tx, float ty, float tz);
 void	draw_line_bres(t_point a, t_point b, t_mlx *mlx);
 void	draw_pixel(t_mlx *mlx, int x, int y, int color);
 void	centroid(t_point *points, int size, t_mlx *mlx);
 void	get_coord(char *str, t_mlx *mlx, int cols);
-void	rotate_for_iso_projection(t_point *point);
+void	parallel_projection(t_point *point);
 void	parse_map(char *map, t_mlx *mlx);
+void	iso_projection(t_point *point);
 void	rotate(int size, t_mlx *mlx);
 void	free_vertex(t_vertex *head);
 void	check_extension(char *str);
+void	scale(t_mlx *mlx, float c);
 void	ft_free_all(char **strs);
 void	print_error(int error);
 void	get_values(t_mlx *mlx);
 void	draw_grid(t_mlx *mlx);
 void	mlx_hooks(t_mlx *mlx);
-void	scale_down(t_mlx *mlx);
 void	clear_mlx(t_mlx *mlx);
-void	scale(t_mlx *mlx);
+void	parallel(t_mlx *mlx);
 
 float	get_scale(int size, t_mlx *mlx);
 float	max_z(t_point *p, int size);
