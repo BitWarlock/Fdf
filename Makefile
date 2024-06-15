@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mrezki <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/11 21:22:04 by mrezki            #+#    #+#              #
-#    Updated: 2024/05/11 21:22:06 by mrezki           ###   ########.fr        #
+#    Updated: 2024/06/15 01:47:28 by mrezki           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIBFT		= $(LIB_DIR)/libft.a
 SRCS		= srcs/fdf.c srcs/Bresenham.c srcs/hooks.c \
 		  srcs/parse.c srcs/coordinates.c srcs/rotation.c \
 		  srcs/math.c srcs/draw.c srcs/free.c srcs/translation.c \
-		  srcs/color.c srcs/projection.c
+		  srcs/color.c srcs/projection.c srcs/conic.c
 OBJS		= $(SRCS:.c=.o)
 MLX		=  -lmlx -framework OpenGL -framework AppKit
 EXE		= fdf

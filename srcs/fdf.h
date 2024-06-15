@@ -35,9 +35,12 @@
 # define M_MINUS	27
 # define X_KEY		7
 # define Y_KEY		16
-# define R_KEY		15
 # define Z_KEY		6
 # define P_KEY		35
+# define I_KEY		34
+# define B_KEY		11
+# define UP_MOUSE	4
+# define DOWN_MOUSE	5
 
 # define HEIGHT 1000
 # define WIDTH 1400
@@ -99,13 +102,13 @@ typedef struct s_mlx
 	int			color;
 }		t_mlx;
 
-void	scale_up(t_point *points, float scale, t_mlx *mlx, float z);
 void	translate_shape(t_mlx *mlx, float tx, float ty, float tz);
 void	rotate_xyz(t_point *point, float x, float y, float z);
 void	add_to_vertex(t_vertex **head, int x, int y, char *z);
 void	rotate_shape(t_mlx *mlx, float x, float y, float z);
 void	translate(t_point *p, float tx, float ty, float tz);
 void	draw_line_bres(t_point a, t_point b, t_mlx *mlx);
+void	scale_up(t_point *points, float scale, float z);
 void	draw_pixel(t_mlx *mlx, int x, int y, int color);
 void	centroid(t_point *points, int size, t_mlx *mlx);
 void	get_coord(char *str, t_mlx *mlx, int cols);
@@ -123,6 +126,8 @@ void	draw_grid(t_mlx *mlx);
 void	mlx_hooks(t_mlx *mlx);
 void	clear_mlx(t_mlx *mlx);
 void	parallel(t_mlx *mlx);
+void	conic(t_mlx *mlx);
+void	iso(t_mlx *mlx);
 
 float	get_scale(int size, t_mlx *mlx);
 float	max_z(t_point *p, int size);
@@ -131,6 +136,7 @@ float	min(float a, float b);
 float	max(float a, float b);
 float	_abs(float a);
 
+int		color_altitude(int z);
 int		get_color(char *str);
 
 #endif // ! FDF_H

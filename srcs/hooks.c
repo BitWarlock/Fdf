@@ -12,27 +12,18 @@
 
 #include "fdf.h"
 
-// void	rotate_for_conic_projection(t_point *point, float angle)
-// {
-// 	float distance = sqrt(point->x * point->x + point->y * point->y);
-// 	float newx, newy;
-//
-// 	if (distance != 0)
-// 	{
-// 		float scale = (distance - point->z * tan(angle)) / distance;
-// 		newx = point->x * scale;
-// 		newy = point->y * scale;
-// 	}
-// 	else
-// {
-// 		newx = 0;
-// 		newy = 0;
-// 	}
-//
-// 	point->x = newx;
-// 	point->y = newy;
-// }
-//
+void	move(t_mlx *mlx, int key)
+{
+	if (key == UP)
+		translate_shape(mlx, 0, -40, 0);
+	if (key == DOWN)
+		translate_shape(mlx, 0, 40, 0);
+	if (key == LEFT)
+		translate_shape(mlx, 40, 0, 0);
+	if (key == RIGHT)
+		translate_shape(mlx, -40, 0, 0);
+}
+
 int	key(int key, t_mlx *mlx)
 {
 	if (key == ESC)
@@ -41,14 +32,9 @@ int	key(int key, t_mlx *mlx)
 		scale(mlx, 1.1);
 	if (key == N_MINUS || key == M_MINUS)
 		scale(mlx, 0.9);
-	if (key == UP)
-		translate_shape(mlx, 0, -20, 0);
-	if (key == DOWN)
-		translate_shape(mlx, 0, 20, 0);
-	if (key == LEFT)
-		translate_shape(mlx, 20, 0, 0);
-	if (key == RIGHT)
-		translate_shape(mlx, -20, 0, 0);
+	if (key == UP || key == DOWN
+		|| key == RIGHT || key == LEFT)
+		move(mlx, key);
 	if (key == X_KEY)
 		rotate_shape(mlx, 0.2, 0, 0);
 	if (key == Y_KEY)
@@ -57,6 +43,10 @@ int	key(int key, t_mlx *mlx)
 		rotate_shape(mlx, 0, 0, 0.2);
 	if (key == P_KEY)
 		parallel(mlx);
+	if (key == I_KEY)
+		iso(mlx);
+	if (key == B_KEY)
+		conic(mlx);
 	return (0);
 }
 
@@ -66,8 +56,18 @@ int	quit(int key, t_mlx *mlx)
 	exit(EXIT_SUCCESS);
 }
 
+int	mouse_hook(int key, int x, int y, t_mlx *mlx)
+{
+	if (key == UP_MOUSE)
+		scale(mlx, 1.1);
+	if (key == DOWN_MOUSE)
+		scale(mlx, 0.9);
+	return (0);
+}
+
 void	mlx_hooks(t_mlx *mlx)
 {
 	mlx_key_hook(mlx->win, key, mlx);
 	mlx_hook(mlx->win, 17, 0, quit, mlx);
+	mlx_mouse_hook(mlx->win, mouse_hook, mlx);
 }

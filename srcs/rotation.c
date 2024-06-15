@@ -35,7 +35,7 @@ void	centroid(t_point *points, int size, t_mlx *mlx)
 	mlx->centroid.z = center_z / size;
 }
 
-void	scale_up(t_point *points, float scale, t_mlx *mlx, float z)
+void	scale_up(t_point *points, float scale, float z)
 {
 	points->x *= scale;
 	points->y *= scale;
@@ -60,7 +60,7 @@ void	rotate(int size, t_mlx *mlx)
 	{
 		translate(&mlx->coords[i], -mlx->centroid.x,
 			-mlx->centroid.y, -mlx->centroid.z);
-		scale_up(&mlx->coords[i], get_scale(size, mlx), mlx, z);
+		scale_up(&mlx->coords[i], get_scale(size, mlx), z);
 		iso_projection(&mlx->coords[i]);
 		mlx->coords[i].x += mlx->mid_x;
 		mlx->coords[i].y += mlx->mid_y;

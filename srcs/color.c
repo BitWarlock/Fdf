@@ -23,6 +23,13 @@ int	search_comma(char *str)
 	return (0);
 }
 
+// int	color_altitude(int z)
+// {
+// 	if (z != 0)
+// 		return (0xEF8633);
+// 	return (0xEC4B27);
+// }
+
 int	get_color(char *str)
 {
 	char	**strs;
@@ -35,5 +42,6 @@ int	get_color(char *str)
 		ft_free_all(strs);
 		return (color);
 	}
-	return (0xFFFFFF);
+	else
+		return (0xFFFFFF);
 }
