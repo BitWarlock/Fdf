@@ -29,34 +29,42 @@ void	init_mlx(t_mlx *mlx)
 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "FDF");
 	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->len, &mlx->end);
-	mlx->color = 0x66ffff;
-	mlx->mid_x = (float)WIDTH / 2;
+	mlx->color = 0xffffff;
+	mlx->mid_x = (float)WIDTH / 2 + 50;
 	mlx->mid_y = (float)HEIGHT / 2;
+	mlx->centroid.rotate = 0;
 }
 
-void	rotate_xyz(t_point *point, float x, float y, float z)
+void	spin(t_mlx *mlx, float x, float y, float z)
 {
-	float	newx;
-	float	newy;
-	float	newz;
+	int	i;
 
-	newy = cos(x) * point->y - sin(x) * point->z;
-	newz = sin(x) * point->y + cos(x) * point->z;
-	point->y = newy;
-	point->z = newz;
-	newx = cos(y) * point->x + sin(y) * point->z;
-	newz = -sin(y) * point->x + cos(y) * point->z;
-	point->x = newx;
-	point->z = newz;
-	newx = cos(z) * point->x - sin(z) * point->y;
-	newy = sin(z) * point->x + cos(z) * point->y;
-	point->x = newx;
-	point->y = newy;
+	i = 0;
+	while (i < mlx->rows * mlx->cols)
+	{
+		mlx->coords[i].x -= mlx->mid_x;
+		mlx->coords[i].y -= mlx->mid_y;
+		rotate_xyz(&mlx->coords[i], x, y, z);
+		mlx->coords[i].x += mlx->mid_x;
+		mlx->coords[i].y += mlx->mid_y;
+		i++;
+	}
+	draw_grid(mlx);
 }
 
-void	f(void)
+int	fdf(t_mlx *mlx)
 {
-	system("leaks -quiet fdf");
+	static int	frame;
+
+	if (!frame)
+		rotate(mlx->rows * mlx->cols, mlx);
+	frame++;
+	if (mlx->centroid.rotate & 1)
+		spin(mlx, 0.002, 0.002, 0.002);
+	if (((mlx->centroid.rotate >> 1) & 1) && frame % 30 == 0)
+		change_color(mlx);
+	draw_grid(mlx);
+	return (1);
 }
 
 int	main(int argc, char *argv[])
@@ -69,8 +77,7 @@ int	main(int argc, char *argv[])
 	init_mlx(&mlx);
 	parse_map(argv[1], &mlx);
 	get_values(&mlx);
-	rotate(mlx.cols * mlx.rows, &mlx);
-	draw_grid(&mlx);
+	mlx_loop_hook(mlx.mlx, fdf, &mlx);
 	mlx_hooks(&mlx);
 	mlx_loop(mlx.mlx);
 	return (EXIT_SUCCESS);

@@ -23,13 +23,6 @@ int	search_comma(char *str)
 	return (0);
 }
 
-// int	color_altitude(int z)
-// {
-// 	if (z != 0)
-// 		return (0xEF8633);
-// 	return (0xEC4B27);
-// }
-
 int	get_color(char *str)
 {
 	char	**strs;
@@ -44,4 +37,35 @@ int	get_color(char *str)
 	}
 	else
 		return (0xFFFFFF);
+}
+
+int	random_color(void)
+{
+	static int	i;
+	int			r;
+	int			g;
+	int			b;
+	long		divisor;
+
+	i++;
+	divisor = 4206923 * i;
+	r = (divisor >> 16) % 256;
+	g = (divisor >> 8) % 256;
+	b = divisor % 256;
+	return ((r << 16) | (g << 8) | b);
+}
+
+void	change_color(t_mlx *mlx)
+{
+	int	i;
+
+	i = 0;
+	mlx->color = random_color();
+	while (i < mlx->rows * mlx-> cols)
+	{
+		if (mlx->coords[i].standard == 1)
+			mlx->coords[i].color = mlx->color;
+		i++;
+	}
+	draw_grid(mlx);
 }

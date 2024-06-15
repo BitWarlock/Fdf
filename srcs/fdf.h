@@ -39,6 +39,10 @@
 # define P_KEY		35
 # define I_KEY		34
 # define B_KEY		11
+# define C_KEY		8
+# define O_KEY		82
+# define F_KEY		3
+# define SP_KEY		49
 # define UP_MOUSE	4
 # define DOWN_MOUSE	5
 
@@ -48,8 +52,6 @@
 # include "/usr/local/include/mlx.h"
 # include <unistd.h>
 # include <stdlib.h>
-# include <string.h>
-# include <stdio.h>
 # include <math.h>
 # include <fcntl.h>
 # include <sys/errno.h>
@@ -61,6 +63,8 @@ typedef struct s_point
 	float	y;
 	float	z;
 	int		color;
+	int		standard;
+	int		rotate;
 }		t_point;
 
 typedef struct s_vertex
@@ -120,6 +124,7 @@ void	free_vertex(t_vertex *head);
 void	check_extension(char *str);
 void	scale(t_mlx *mlx, float c);
 void	ft_free_all(char **strs);
+void	change_color(t_mlx *mlx);
 void	print_error(int error);
 void	get_values(t_mlx *mlx);
 void	draw_grid(t_mlx *mlx);

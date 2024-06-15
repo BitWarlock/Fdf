@@ -61,6 +61,8 @@ void	add_to_vertex(t_vertex **head, int x, int y, char *z)
 	new->point.y = (float)y;
 	new->point.z = (float)ft_atoi(z);
 	new->point.color = get_color(z);
+	if (new->point.color == 0xFFFFFF)
+		new->point.standard = 1;
 	new->next = NULL;
 	if (!*head)
 		*head = new;

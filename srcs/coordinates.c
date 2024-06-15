@@ -29,6 +29,7 @@ void	get_values(t_mlx *mlx)
 		points[i].y = mlx->points->point.y;
 		points[i].z = mlx->points->point.z;
 		points[i].color = mlx->points->point.color;
+		points[i].standard = mlx->points->point.standard;
 		if (!mlx->points->next)
 			break ;
 		mlx->points = mlx->points->next;

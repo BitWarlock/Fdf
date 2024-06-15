@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void	move(t_mlx *mlx, int key)
+void	rotation_keys(t_mlx *mlx, int key)
 {
 	if (key == UP)
 		translate_shape(mlx, 0, -40, 0);
@@ -22,19 +22,6 @@ void	move(t_mlx *mlx, int key)
 		translate_shape(mlx, 40, 0, 0);
 	if (key == RIGHT)
 		translate_shape(mlx, -40, 0, 0);
-}
-
-int	key(int key, t_mlx *mlx)
-{
-	if (key == ESC)
-		exit(EXIT_SUCCESS);
-	if (key == N_PLUS || key == M_PLUS)
-		scale(mlx, 1.1);
-	if (key == N_MINUS || key == M_MINUS)
-		scale(mlx, 0.9);
-	if (key == UP || key == DOWN
-		|| key == RIGHT || key == LEFT)
-		move(mlx, key);
 	if (key == X_KEY)
 		rotate_shape(mlx, 0.2, 0, 0);
 	if (key == Y_KEY)
@@ -47,6 +34,30 @@ int	key(int key, t_mlx *mlx)
 		iso(mlx);
 	if (key == B_KEY)
 		conic(mlx);
+}
+
+int	key(int key, t_mlx *mlx)
+{
+	if (key == ESC)
+		exit(EXIT_SUCCESS);
+	if (key == N_PLUS || key == M_PLUS)
+		scale(mlx, 1.1);
+	if (key == N_MINUS || key == M_MINUS)
+		scale(mlx, 0.9);
+	if (key == UP || key == DOWN
+		|| key == RIGHT || key == LEFT
+		|| key == X_KEY || key == Y_KEY
+		|| key == Z_KEY || key == P_KEY
+		|| key == I_KEY || key == B_KEY)
+		rotation_keys(mlx, key);
+	if (key == C_KEY)
+		change_color(mlx);
+	if (key == SP_KEY)
+		mlx->centroid.rotate |= 1;
+	if (key == O_KEY)
+		mlx->centroid.rotate &= ~1;
+	if (key == F_KEY)
+		mlx->centroid.rotate |= 2;
 	return (0);
 }
 

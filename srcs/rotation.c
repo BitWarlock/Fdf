@@ -85,3 +85,23 @@ void	rotate_shape(t_mlx *mlx, float x, float y, float z)
 	}
 	draw_grid(mlx);
 }
+
+void	rotate_xyz(t_point *point, float x, float y, float z)
+{
+	float	newx;
+	float	newy;
+	float	newz;
+
+	newy = cos(x) * point->y - sin(x) * point->z;
+	newz = sin(x) * point->y + cos(x) * point->z;
+	point->y = newy;
+	point->z = newz;
+	newx = cos(y) * point->x + sin(y) * point->z;
+	newz = -sin(y) * point->x + cos(y) * point->z;
+	point->x = newx;
+	point->z = newz;
+	newx = cos(z) * point->x - sin(z) * point->y;
+	newy = sin(z) * point->x + cos(z) * point->y;
+	point->x = newx;
+	point->y = newy;
+}
