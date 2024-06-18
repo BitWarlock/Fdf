@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../incs/fdf.h"
 
 void	scale(t_mlx *mlx, float scale_)
 {

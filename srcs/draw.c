@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../incs/fdf.h"
 
 void	draw_pixel(t_mlx *mlx, int x, int y, int color)
 {

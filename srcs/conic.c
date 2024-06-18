@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../incs/fdf.h"
 
 void	conic_projection(t_point *point, float angle)
 {

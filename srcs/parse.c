@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../incs/fdf.h"
 
 void	check_extension(char *str)
 {

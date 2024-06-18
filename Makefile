@@ -10,7 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 
-# C_FLAGS		= -fsanitize=address -O2 -g
+UNAME		:= $(shell uname)
+C_FLAGS		= -O3 -g -DOS
 LIB_DIR		= ./libft
 HEADER		= srcs/fdf.h
 LIBFT		= $(LIB_DIR)/libft.a
@@ -19,14 +20,25 @@ SRCS		= srcs/fdf.c srcs/Bresenham.c srcs/hooks.c \
 		  srcs/math.c srcs/draw.c srcs/free.c srcs/translation.c \
 		  srcs/color.c srcs/projection.c srcs/conic.c
 OBJS		= $(SRCS:.c=.o)
-MLX		=  -lmlx -framework OpenGL -framework AppKit
 EXE		= fdf
 RM		= rm -rf
 
-all: $(EXE)
+# TODO Install mlx and it's dependencies if it's not installed
 
-$(EXE): $(LIBFT) $(OBJS)
-	$(CC) $(C_FLAGS) -g $(MLX) $^ -o $@
+ifeq ($(UNAME), darwin)
+	MLX = -lmlx -framework OpenGL -framework AppKit
+	OS = MACOS
+else ifeq ($(UNAME), Linux)
+	# MLX = -I/usr/local/include -L/usr/local/lib -lmlx -lXext -lX11 -lm -lz -lbsd
+	MLX = -Lmlx -lmlx -L/usr/local/lib -lXext -lX11 -lm
+	CC = gcc
+	OS = LINUX
+endif
+
+all: $(LIBFT) $(EXE)
+
+$(EXE): $(OBJS)
+	$(CC) $(C_FLAGS) $(OBJS) $(LIBFT) $(MLX) -o $@
 	@echo ""
 	@echo "\033[1;36m'fdf' is now ready."
 	@echo "Usage: ./fdf maps/<map>"

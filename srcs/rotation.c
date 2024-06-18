@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../incs/fdf.h"
 
 void	centroid(t_point *points, int size, t_mlx *mlx)
 {

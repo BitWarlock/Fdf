@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../incs/fdf.h"
 
 void	rotation_keys(t_mlx *mlx, int key)
 {
@@ -38,6 +38,7 @@ void	rotation_keys(t_mlx *mlx, int key)
 
 int	key(int key, t_mlx *mlx)
 {
+	ft_printf(1, "key: %d\n", key);
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
 	if (key == N_PLUS || key == M_PLUS)
@@ -69,6 +70,7 @@ int	quit(int key, t_mlx *mlx)
 
 int	mouse_hook(int key, int x, int y, t_mlx *mlx)
 {
+	ft_printf(1, "mouse: %d\n", key);
 	if (key == UP_MOUSE)
 		scale(mlx, 1.1);
 	if (key == DOWN_MOUSE)
