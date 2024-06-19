@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 UNAME		:= $(shell uname)
-C_FLAGS		= -O3 -g -DOS
+C_FLAGS		= -O3 -g -DOS -Wall -Wextra -Werror
 LIB_DIR		= ./libft
 HEADER		= srcs/fdf.h
 LIBFT		= $(LIB_DIR)/libft.a
@@ -45,7 +45,7 @@ $(EXE): $(OBJS)
 
 %.o: %.c $(HEADER)
 	@echo "\033[32m"
-	$(CC) $(C_FLAGS) -c -o $@ $<
+	$(CC) $(C_FLAGS -c -o $@ $<
 
 $(LIBFT):
 	@echo "\033[32mCompiling libft"

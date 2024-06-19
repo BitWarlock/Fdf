@@ -35,7 +35,7 @@ void	rotation_keys(t_mlx *mlx, int key)
 	if (key == B_KEY)
 		conic(mlx);
 }
-
+#include <stdio.h>
 int	key(int key, t_mlx *mlx)
 {
 	ft_printf(1, "key: %d\n", key);
@@ -52,7 +52,25 @@ int	key(int key, t_mlx *mlx)
 		|| key == I_KEY || key == B_KEY)
 		rotation_keys(mlx, key);
 	if (key == C_KEY)
-		change_color(mlx);
+	{
+		centroid(mlx->coords, mlx->rows*mlx->cols, mlx);
+		for (int i = 0; i < mlx->rows*mlx->cols; i++)
+		{
+			// translate(&mlx->coords[i], -mlx->centroid.x,
+			     // -mlx->centroid.y, -mlx->centroid.z);
+			printf("%f\n", mlx->coords[i].z);
+			mlx->coords[i].x -= mlx->mid_x;
+			mlx->coords[i].y -= mlx->mid_y;
+			mlx->coords[i].z *= 1.01;
+			iso_projection(&mlx->coords[i]);
+			// rotate_xyz(&mlx->coords[i], 0, 0, 0);
+			mlx->coords[i].x += mlx->mid_x;
+			mlx->coords[i].y += mlx->mid_y;
+		}
+		// rotate(mlx->rows*mlx->cols, mlx);
+		draw_grid(mlx);
+	}
+		// change_color(mlx);
 	if (key == SP_KEY)
 		mlx->centroid.rotate |= 1;
 	if (key == O_KEY)
@@ -64,7 +82,6 @@ int	key(int key, t_mlx *mlx)
 
 int	quit(int key, t_mlx *mlx)
 {
-	mlx_destroy_window(mlx->mlx, mlx->win);
 	exit(EXIT_SUCCESS);
 }
 

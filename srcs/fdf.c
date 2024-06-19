@@ -18,7 +18,7 @@ void	print_error(int error)
 		ft_printf(2, RED"Usage: ./fdf maps/map.fdf\n");
 	if (error == WRONG_EXT)
 		ft_printf(2, RED"Wrong extension: should end with .fdf\n");
-	if (error == EIO)
+	else
 		ft_printf(2, RED"Error: %s\n", strerror(error));
 	exit(EXIT_FAILURE);
 }
@@ -26,10 +26,15 @@ void	print_error(int error)
 void	init_mlx(t_mlx *mlx)
 {
 	mlx->mlx = mlx_init();
+	if (!mlx->mlx)
+		print_error(EIO);
 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "FDF");
 	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
+	if (!mlx->img || !mlx->win)
+		print_error(EIO);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->len, &mlx->end);
 	mlx->color = 0xffffff;
+	mlx->points = NULL;
 	mlx->mid_x = (float)WIDTH / 2 + 50;
 	mlx->mid_y = (float)HEIGHT / 2;
 	mlx->centroid.rotate = 0;
@@ -60,7 +65,7 @@ int	fdf(t_mlx *mlx)
 		rotate(mlx->rows * mlx->cols, mlx);
 	frame++;
 	if (mlx->centroid.rotate & 1)
-		spin(mlx, 0.002, 0.002, 0.002);
+		spin(mlx, 0.005, 0.005, 0.005);
 	if (((mlx->centroid.rotate >> 1) & 1) && frame % 30 == 0)
 		change_color(mlx);
 	draw_grid(mlx);
@@ -79,6 +84,7 @@ int	main(int argc, char *argv[])
 	get_values(&mlx);
 	mlx_loop_hook(mlx.mlx, fdf, &mlx);
 	mlx_hooks(&mlx);
+	free_vertex(mlx.points);
 	mlx_loop(mlx.mlx);
 	return (EXIT_SUCCESS);
 }

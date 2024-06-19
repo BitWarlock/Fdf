@@ -56,10 +56,8 @@ void	draw_grid(t_mlx *mlx)
 	points = mlx->coords;
 	x = -1;
 	while (++x < mlx->cols * mlx->rows)
-	{
 		if (x % mlx->rows != 0)
 			draw_line_bres(points[x - 1], points[x], mlx);
-	}
 	x = mlx->rows;
 	y = -1;
 	while (++y + x < mlx->cols * mlx->rows)

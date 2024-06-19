@@ -37,18 +37,18 @@ void	get_values(t_mlx *mlx)
 	}
 	mlx->coords = points;
 	mlx->points = head;
-	free_vertex(head);
 }
 
 void	get_coord(char *str, t_mlx *mlx, int cols)
 {
 	t_vertex	*last;
 	t_vertex	*new;
-	t_vertex	*current;
 	char		**strs;
 	int			rows;
 
 	strs = ft_split(str, ' ');
+	if (!strs)
+		print_error(EIO);
 	new = NULL;
 	rows = 0;
 	while (strs[rows])
