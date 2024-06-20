@@ -10,35 +10,25 @@
 #                                                                              #
 # **************************************************************************** #
 
-UNAME		:= $(shell uname)
-C_FLAGS		= -O3 -g -DOS -Wall -Wextra -Werror
+C_FLAGS		= -O3 -g -Wall -Wextra -Werror
 LIB_DIR		= ./libft
-HEADER		= srcs/fdf.h
+HEADER		= srcs/fdf.h bonus/fdf_bonus.h
 LIBFT		= $(LIB_DIR)/libft.a
-SRCS		= srcs/fdf.c srcs/Bresenham.c srcs/hooks.c \
-		  srcs/parse.c srcs/coordinates.c srcs/rotation.c \
-		  srcs/math.c srcs/draw.c srcs/free.c srcs/translation.c \
-		  srcs/color.c srcs/projection.c srcs/conic.c
+SRCS		= $(shell find ./srcs -name '*.c')
+SRCS_B		= $(shell find ./bonus -name '*.c')
+MLX		= -lmlx -framework OpenGL -framework AppKit
+LIBFT_SRCS	= $(shell find $(LIB_DIR) -name '*.c')
+LIBFT_OBJS	= $(LIBFT_SRCS:.c=.o)
 OBJS		= $(SRCS:.c=.o)
+OBJS_B		= $(SRCS_B:.c=.o)
 EXE		= fdf
+EXE_B		= fdf_bonus
 RM		= rm -rf
 
-# TODO Install mlx and it's dependencies if it's not installed
+all: $(EXE)
 
-ifeq ($(UNAME), darwin)
-	MLX = -lmlx -framework OpenGL -framework AppKit
-	OS = MACOS
-else ifeq ($(UNAME), Linux)
-	# MLX = -I/usr/local/include -L/usr/local/lib -lmlx -lXext -lX11 -lm -lz -lbsd
-	MLX = -Lmlx -lmlx -L/usr/local/lib -lXext -lX11 -lm
-	CC = gcc
-	OS = LINUX
-endif
-
-all: $(LIBFT) $(EXE)
-
-$(EXE): $(OBJS)
-	$(CC) $(C_FLAGS) $(OBJS) $(LIBFT) $(MLX) -o $@
+$(EXE): $(OBJS) $(LIBFT)
+	$(CC) $(C_FLAGS) $^ $(MLX) -o $@
 	@echo ""
 	@echo "\033[1;36m'fdf' is now ready."
 	@echo "Usage: ./fdf maps/<map>"
@@ -47,22 +37,28 @@ $(EXE): $(OBJS)
 	@echo "\033[32m"
 	$(CC) $(C_FLAGS) -c -o $@ $<
 
-$(LIBFT):
+$(LIBFT): $(LIBFT_OBJS)
 	@echo "\033[32mCompiling libft"
 	@echo ""
 	$(MAKE) -C $(LIB_DIR)
 
+bonus: $(OBJS_B) $(LIBFT)
+	$(CC) $(C_FLAGS) $^ $(MLX) -o $(EXE_B)
+	@echo ""
+	@echo "\033[1;36m'fdf_bonus' is now ready."
+	@echo "Usage: ./fdf_bonus maps/<map>"
+
 clean:
 	@echo "\033[38;2;188;31;54m"
-	$(RM) $(OBJS) $(OBJS_B)
-	$(MAKE) -C libft/ clean
+	@$(RM) $(OBJS) $(OBJS_B)
+	@$(MAKE) -C libft/ clean
 	@echo ""
 	@echo "\033[38;2;188;31;54mCleanup Complete."
 	@echo ""
 
 fclean: clean
-	$(RM) $(LIBFT) $(EXE) a.out a.out.dSYM.DS_Store
-	$(MAKE) -C libft/ fclean
+	@$(RM) $(LIBFT) $(EXE) fdf.dSYM .DS_Store $(EXE_B)
+	@$(MAKE) -C libft/ fclean
 	@echo ""
 	@echo "\033[38;2;188;31;54mFull Cleanup Complete."
 	@echo ""
