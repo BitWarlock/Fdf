@@ -50,12 +50,9 @@ void	get_coord(char *str, t_mlx *mlx, int cols)
 	if (!strs)
 		print_error(EIO);
 	new = NULL;
-	rows = 0;
-	while (strs[rows])
-	{
+	rows = -1;
+	while (strs[++rows])
 		add_to_vertex(&new, rows, cols, strs[rows]);
-		rows++;
-	}
 	mlx->rows = rows;
 	if (mlx->points == NULL)
 		mlx->points = new;

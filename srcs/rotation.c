@@ -50,11 +50,7 @@ void	rotate(int size, t_mlx *mlx)
 	i = 0;
 	centroid(mlx->coords, size, mlx);
 	z = max(_abs(max_z(mlx->coords, size)), _abs(min_z(mlx->coords, size)));
-	if (!z)
-		z = 1;
 	if (z > 100)
-		z /= 100;
-	if (size > 20000)
 		z = 10;
 	while (i < size)
 	{

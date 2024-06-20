@@ -23,9 +23,9 @@
 # define RED		"\033[31m"
 
 # if OS == LINUX
-# include "keys_linux.h"
+#  include "keys_linux.h"
 # elif OS == MACOS
-# include "keys_macos.h"
+#  include "keys_macos.h"
 # endif
 
 # include "/usr/local/include/mlx.h"

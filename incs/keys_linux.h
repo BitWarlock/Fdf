@@ -26,5 +26,4 @@
 # define HEIGHT 708
 # define WIDTH 1365
 
-
 #endif // !KEYS_LINUX_H

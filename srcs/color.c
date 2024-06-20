@@ -36,23 +36,7 @@ int	get_color(char *str)
 		return (color);
 	}
 	else
-		return (0xFFFFFF);
-}
-
-int	random_color(void)
-{
-	static int	i;
-	int			r;
-	int			g;
-	int			b;
-	long		divisor;
-
-	i++;
-	divisor = 4206923 * i;
-	r = (divisor >> 16) % 256;
-	g = (divisor >> 8) % 256;
-	b = divisor % 256;
-	return ((r << 16) | (g << 8) | b);
+		return (0xFFFFFE);
 }
 
 void	change_color(t_mlx *mlx)
@@ -60,7 +44,7 @@ void	change_color(t_mlx *mlx)
 	int	i;
 
 	i = 0;
-	mlx->color = random_color();
+	mlx->color = rand() % 0xFFFFFF;
 	while (i < mlx->rows * mlx-> cols)
 	{
 		if (mlx->coords[i].standard == 1)
