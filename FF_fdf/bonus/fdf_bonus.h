@@ -61,11 +61,20 @@ typedef struct s_bres
 	int	*c;
 }		t_bres;
 
+typedef struct s_mouse
+{
+	int	prev_x;
+	int	prev_y;
+	int	x;
+	int	y;
+}		t_mouse;
+
 typedef struct s_mlx
 {
 	t_vertex	*points;
 	t_point		*coords;
 	t_point		centroid;
+	t_mouse		mouse;
 	float		mid_x;
 	float		mid_y;
 	void		*mlx;

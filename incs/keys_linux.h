@@ -22,6 +22,7 @@
 # define SP_KEY		32
 # define UP_MOUSE	4
 # define DOWN_MOUSE	5
+# define LEFT_MOUSE	1
 
 # define HEIGHT 708
 # define WIDTH 1365

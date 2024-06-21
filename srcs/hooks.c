@@ -73,6 +73,11 @@ int	mouse_hook(int key, int x, int y, t_mlx *mlx)
 		scale(mlx, 1.1);
 	if (key == DOWN_MOUSE)
 		scale(mlx, 0.9);
+	if (key == LEFT_MOUSE)
+		mlx->centroid.rotate |= 4;
+	while (mlx->centroid.rotate >> 2 & 1)
+		ft_printf(1, "mouse position (%d, %d)\n", x, y);
+
 	return (0);
 }
 

@@ -42,5 +42,5 @@ void	free_vertex(t_vertex *head)
 
 void	clear_mlx(t_mlx *mlx)
 {
-	ft_memset(mlx->addr, 0, WIDTH * HEIGHT * (mlx->bpp / 8));
+	ft_memset(mlx->addr, 0x003300, WIDTH * HEIGHT * (mlx->bpp / 8));
 }
