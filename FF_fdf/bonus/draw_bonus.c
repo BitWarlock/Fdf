@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghostface <ghostface@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 05:52:08 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/20 19:46:47 by ghostface        ###   ########.fr       */
+/*   Updated: 2024/06/22 15:34:04 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,23 @@ int	print_strings(t_mlx *mlx)
 	mlx_string_put(mlx->mlx, mlx->win, WIDTH / 2 - 15, 0, mlx->color, "FDF");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 100, mlx->color,
 		"         CONTROLS");
-	mlx_string_put(mlx->mlx, mlx->win, 40, 130, mlx->color, "+/-: Zoom ");
+	mlx_string_put(mlx->mlx, mlx->win, 40, 130, mlx->color,
+		"+/-, Scroll: Zoom in/out");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 160, mlx->color,
-		"x/y/z: Rotate X/Y/Z axis");
+		"Space/0: Rotate/Stop");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 190, mlx->color,
-		"Scroll: zoom in/out");
+		"Numeric pad +/-: Rotation speed");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 220, mlx->color, "P: Parallel");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 250, mlx->color, "I: Isometric");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 280, mlx->color, "B: Blackhole");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 310, mlx->color, "C: Change color");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 340, mlx->color, "F: Flash");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 370, mlx->color,
-		"Space/0: Rotate/Stop");
+		"x/y/z: Rotate X/Y/Z axis");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 400, mlx->color,
 		"Arrows: Translate");
+	mlx_string_put(mlx->mlx, mlx->win, 40, 430, mlx->color,
+		"Cursor: Move the map");
 	return (0);
 }
 

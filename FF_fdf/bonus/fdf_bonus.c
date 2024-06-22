@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_bonus.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghostface <ghostface@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:07:29 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/20 19:46:53 by ghostface        ###   ########.fr       */
+/*   Updated: 2024/06/22 15:34:07 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ void	init_mlx(t_mlx *mlx)
 	mlx->mid_x = (float)WIDTH / 2 + 50;
 	mlx->mid_y = (float)HEIGHT / 2;
 	mlx->centroid.rotate = 0;
+	mlx->x_angle = 0.002;
+	mlx->y_angle = 0.002;
+	mlx->z_angle = 0.002;
 }
 
 void	spin(t_mlx *mlx, float x, float y, float z)
@@ -67,7 +70,7 @@ int	fdf(t_mlx *mlx)
 		rotate(mlx->rows * mlx->cols, mlx);
 	frame++;
 	if (mlx->centroid.rotate & 1)
-		spin(mlx, 0.002, 0.002, 0.002);
+		spin(mlx, mlx->x_angle, mlx->y_angle, mlx->z_angle);
 	if (((mlx->centroid.rotate >> 1) & 1) && frame % 69 == 0)
 		change_color(mlx);
 	draw_grid(mlx);

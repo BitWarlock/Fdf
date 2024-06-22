@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bresenham.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghostface <ghostface@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:07:13 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/20 19:45:04 by ghostface        ###   ########.fr       */
+/*   Updated: 2024/06/22 15:32:06 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,3 @@ void	draw_line_bres(t_point a, t_point b, t_mlx *mlx)
 		}
 	}
 }
-//
-// void	init_mlx(t_mlx *mlx)
-// {
-// 	mlx->mlx = mlx_init();
-// 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "FDF");
-// 	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
-// 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->len, &mlx->end);
-// 	mlx->height = HEIGHT;
-// 	mlx->width = WIDTH;
-// 	mlx->color = 0xFF00FF;
-// }
-//
-// int main(void)
-// {
-// 	t_mlx mlx;
-//
-// 	init_mlx(&mlx);
-// 	draw_line_bres((t_point){50, 50, 0}, (t_point){300, 300, 0}, &mlx);
-// 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
-// 	mlx_loop(mlx.mlx);
-//
-// 	return EXIT_SUCCESS;
-// }

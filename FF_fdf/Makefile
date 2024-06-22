@@ -3,27 +3,27 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ghostface <ghostface@student.42.fr>        +#+  +:+       +#+         #
+#    By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/11 21:22:04 by mrezki            #+#    #+#              #
-#    Updated: 2024/06/20 19:46:10 by ghostface        ###   ########.fr        #
+#    Updated: 2024/06/22 15:32:56 by mrezki           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 C_FLAGS		= -O3 -g -Wall -Wextra -Werror
 LIB_DIR		= ./libft
-HEADER		= srcs/fdf.h bonus/fdf_bonus.h
+HEADER		= srcs/fdf.h bonus/fdf_bonus.h libft/libft.h
 LIBFT		= $(LIB_DIR)/libft.a
 SRCS		= $(shell find ./srcs -name '*.c')
 SRCS_B		= $(shell find ./bonus -name '*.c')
-MLX		= -lmlx -framework OpenGL -framework AppKit
+MLX			= -lmlx -framework OpenGL -framework AppKit
 LIBFT_SRCS	= $(shell find $(LIB_DIR) -name '*.c')
 LIBFT_OBJS	= $(LIBFT_SRCS:.c=.o)
 OBJS		= $(SRCS:.c=.o)
 OBJS_B		= $(SRCS_B:.c=.o)
-EXE		= fdf
+EXE			= fdf
 EXE_B		= fdf_bonus
-RM		= rm -rf
+RM			= rm -rf
 
 all: $(EXE)
 

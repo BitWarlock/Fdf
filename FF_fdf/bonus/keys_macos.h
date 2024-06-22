@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keys_macos.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghostface <ghostface@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/20 19:47:11 by ghostface         #+#    #+#             */
-/*   Updated: 2024/06/20 19:47:12 by ghostface        ###   ########.fr       */
+/*   Created: 2024/06/22 15:34:23 by mrezki            #+#    #+#             */
+/*   Updated: 2024/06/22 15:34:27 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define SP_KEY		49
 # define UP_MOUSE	4
 # define DOWN_MOUSE	5
+# define LEFT_MOUSE	1
 
 # define HEIGHT 1000
 # define WIDTH 1400

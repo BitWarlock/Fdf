@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_bonus.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghostface <ghostface@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 21:22:49 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/20 19:47:00 by ghostface        ###   ########.fr       */
+/*   Updated: 2024/06/22 15:34:10 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ typedef struct s_mlx
 	t_mouse		mouse;
 	float		mid_x;
 	float		mid_y;
+	float		x_angle;
+	float		y_angle;
+	float		z_angle;
 	void		*mlx;
 	void		*win;
 	void		*img;
@@ -104,6 +107,7 @@ void	parse_map(char *map, t_mlx *mlx);
 void	iso_projection(t_point *point);
 void	rotate(int size, t_mlx *mlx);
 void	free_vertex(t_vertex *head);
+void	mlx_mouse_hooks(t_mlx *mlx);
 void	check_extension(char *str);
 void	scale(t_mlx *mlx, float c);
 void	ft_free_all(char **strs);
@@ -126,5 +130,6 @@ float	_abs(float a);
 
 int		color_altitude(int z);
 int		get_color(char *str);
+int		quit(t_mlx *mlx);
 
 #endif // ! FDF_BONUS_H

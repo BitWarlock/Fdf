@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   hooks_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghostface <ghostface@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mrezki <mrezki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 05:52:21 by mrezki            #+#    #+#             */
-/*   Updated: 2024/06/20 19:47:19 by ghostface        ###   ########.fr       */
+/*   Updated: 2024/06/22 15:34:14 by mrezki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
+#include "keys_macos.h"
 
 void	rotation_keys(t_mlx *mlx, int key)
 {
@@ -36,13 +37,31 @@ void	rotation_keys(t_mlx *mlx, int key)
 		conic(mlx);
 }
 
+void	rotation_speed(int key, t_mlx *mlx)
+{
+	if (key == N_PLUS)
+	{
+		mlx->x_angle += 0.002;
+		mlx->y_angle += 0.002;
+		mlx->z_angle += 0.002;
+	}
+	if (key == N_MINUS)
+	{
+		mlx->x_angle -= 0.002;
+		mlx->y_angle -= 0.002;
+		mlx->z_angle -= 0.002;
+	}
+}
+
 int	key(int key, t_mlx *mlx)
 {
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
-	if (key == N_PLUS || key == M_PLUS)
+	if (key == N_PLUS || key == N_MINUS)
+		rotation_speed(key, mlx);
+	if (key == M_PLUS)
 		scale(mlx, 1.1);
-	if (key == N_MINUS || key == M_MINUS)
+	if (key == M_MINUS)
 		scale(mlx, 0.9);
 	if (key == UP || key == DOWN
 		|| key == RIGHT || key == LEFT
@@ -61,66 +80,14 @@ int	key(int key, t_mlx *mlx)
 	return (0);
 }
 
-int	quit(int key, t_mlx *mlx)
+int	quit(t_mlx *mlx)
 {
-	(void)key;
 	(void)mlx;
 	exit(EXIT_SUCCESS);
-}
-
-int	mouse_hook(int key, int x, int y, t_mlx *mlx)
-{
-	(void)y;
-	(void)x;
-	if (key == UP_MOUSE)
-		scale(mlx, 1.1);
-	if (key == DOWN_MOUSE)
-		scale(mlx, 0.9);
-	return (0);
-}
-
-int	released(int key, int x, int y, t_mlx *mlx)
-{
-	(void)key;
-	(void)x;
-	(void)y;
-	mlx->centroid.rotate &= ~(1 << 2);
-	return (0);
-}
-
-int	pressed(int key, int x, int y, t_mlx *mlx)
-{
-	(void)x;
-	(void)y;
-	if (key == LEFT_MOUSE)
-		mlx->centroid.rotate |= 4;
-	return (0);
-}
-
-int	move(int x, int y, t_mlx *mlx)
-{
-	mlx->mouse->prev_x = mlx->mouse->x;
-	mlx->mouse->prev_y = mlx->mouse->y;
-	mlx->mouse->x = x;
-	mlx->mouse->y = y;
-	if ((mlx->centroid.rotate >> 2) & 1)
-	{
-		for (int i = 0; i < mlx->rows*mlx->cols; i++)
-		{
-			rotate_xyz(&mlx->coords[i],
-				(x - mlx->mouse->prev_x) * 0.001,
-				(y - mlx->mouse->prev_y) * 0.001, 0);
-		}
-		draw_grid(mlx);
-	}
 }
 
 void	mlx_hooks(t_mlx *mlx)
 {
 	mlx_key_hook(mlx->win, key, mlx);
-	mlx_hook(mlx->win, 17, 0, quit, mlx);
-	mlx_hook(fdf->win, 4, 0, pressed, fdf);
-	mlx_hook(fdf->win, 5, 0, released, fdf);
-	mlx_hook(fdf->win, 6, 0, move, fdf);
-	mlx_mouse_hook(mlx->win, mouse_hook, mlx);
+	mlx_mouse_hooks(mlx);
 }

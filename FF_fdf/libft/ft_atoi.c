@@ -37,11 +37,3 @@ int	ft_atoi(const char *str)
 	}
 	return (sign * res);
 }
-//
-// int main(void)
-// {
-// 	printf("%d\n", atoi("123456789123456789123456"));
-// 	printf("%d\n", ft_atoi("123456789123456789123456"));
-//
-// 	return EXIT_SUCCESS;
-// }
