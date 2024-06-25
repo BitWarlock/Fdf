@@ -55,6 +55,15 @@ void	rotation_speed(int key, t_mlx *mlx)
 
 int	key(int key, t_mlx *mlx)
 {
+	if (key == H_KEY)
+	{
+		if (mlx->text)
+			mlx->text = 0;
+		else
+			mlx->text = 1;
+	}
+	if (key == W_KEY)
+		mlx->reflect = 1;
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
 	if (key == N_PLUS || key == N_MINUS)
@@ -74,7 +83,10 @@ int	key(int key, t_mlx *mlx)
 	if (key == SP_KEY)
 		mlx->centroid.rotate |= 1;
 	if (key == O_KEY)
+	{
+		mlx->reflect = 0;
 		mlx->centroid.rotate &= ~1;
+	}
 	if (key == F_KEY)
 		mlx->centroid.rotate |= 2;
 	return (0);

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
+#include "keys_macos.h"
 
 void	ft_free_all(char **strs)
 {
@@ -43,4 +44,9 @@ void	free_vertex(t_vertex *head)
 void	clear_mlx(t_mlx *mlx)
 {
 	ft_memset(mlx->addr, 0x003300, WIDTH * HEIGHT * (mlx->bpp / 8));
+}
+
+void reflection(t_mlx *mlx)
+{
+	memset(mlx->addr, 0x000FFF, WIDTH * HEIGHT * (mlx->bpp / 8));
 }

@@ -37,12 +37,14 @@ void	init_mlx(t_mlx *mlx)
 		print_error(EIO);
 	mlx->color = 0xffffff;
 	mlx->points = NULL;
-	mlx->mid_x = (float)WIDTH / 2 + 50;
+	mlx->mid_x = (float)WIDTH / 2;
 	mlx->mid_y = (float)HEIGHT / 2;
 	mlx->centroid.rotate = 0;
 	mlx->x_angle = 0.002;
 	mlx->y_angle = 0.002;
 	mlx->z_angle = 0.002;
+	mlx->reflect = 0;
+	mlx->text = 1;
 }
 
 void	spin(t_mlx *mlx, float x, float y, float z)
@@ -71,7 +73,7 @@ int	fdf(t_mlx *mlx)
 	frame++;
 	if (mlx->centroid.rotate & 1)
 		spin(mlx, mlx->x_angle, mlx->y_angle, mlx->z_angle);
-	if (((mlx->centroid.rotate >> 1) & 1) && frame % 69 == 0)
+	if (((mlx->centroid.rotate >> 1) & 1) && frame % 9 == 0)
 		change_color(mlx);
 	draw_grid(mlx);
 	return (1);

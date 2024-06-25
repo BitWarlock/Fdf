@@ -45,6 +45,10 @@ int	print_strings(t_mlx *mlx)
 		"Arrows: Translate");
 	mlx_string_put(mlx->mlx, mlx->win, 40, 430, mlx->color,
 		"Cursor: Move the map");
+	mlx_string_put(mlx->mlx, mlx->win, 40, 460, mlx->color,
+		"H: Hide/Show text");
+	mlx_string_put(mlx->mlx, mlx->win, 40, 490, mlx->color,
+		"W: WTF");
 	return (0);
 }
 
@@ -54,7 +58,10 @@ void	draw_grid(t_mlx *mlx)
 	int		x;
 	int		y;
 
-	clear_mlx(mlx);
+	if (mlx->reflect)
+		reflection(mlx);
+	else
+		clear_mlx(mlx);
 	points = mlx->coords;
 	x = -1;
 	while (++x < mlx->cols * mlx->rows)
@@ -65,5 +72,6 @@ void	draw_grid(t_mlx *mlx)
 	while (++y + x < mlx->cols * mlx->rows)
 		draw_line_bres(points[y], points[y + x], mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
-	print_strings(mlx);
+	if (mlx->text)
+		print_strings(mlx);
 }

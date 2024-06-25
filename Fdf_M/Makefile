@@ -16,14 +16,14 @@ HEADER		= srcs/fdf.h bonus/fdf_bonus.h libft/libft.h
 LIBFT		= $(LIB_DIR)/libft.a
 SRCS		= $(shell find ./srcs -name '*.c')
 SRCS_B		= $(shell find ./bonus -name '*.c')
-MLX			= -lmlx -framework OpenGL -framework AppKit
+MLX		= -lmlx -framework OpenGL -framework AppKit
 LIBFT_SRCS	= $(shell find $(LIB_DIR) -name '*.c')
 LIBFT_OBJS	= $(LIBFT_SRCS:.c=.o)
 OBJS		= $(SRCS:.c=.o)
 OBJS_B		= $(SRCS_B:.c=.o)
-EXE			= fdf
+EXE		= fdf
 EXE_B		= fdf_bonus
-RM			= rm -rf
+RM		= rm -rf
 
 all: $(EXE)
 

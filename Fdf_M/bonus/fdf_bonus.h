@@ -90,6 +90,8 @@ typedef struct s_mlx
 	int			rows;
 	int			cols;
 	int			color;
+	int			reflect;
+	int			text;
 }		t_mlx;
 
 void	translate_shape(t_mlx *mlx, float tx, float ty, float tz);
@@ -118,6 +120,7 @@ void	draw_grid(t_mlx *mlx);
 void	mlx_hooks(t_mlx *mlx);
 void	clear_mlx(t_mlx *mlx);
 void	parallel(t_mlx *mlx);
+void	reflection(t_mlx *mlx);
 void	conic(t_mlx *mlx);
 void	iso(t_mlx *mlx);
 
