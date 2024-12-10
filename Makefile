@@ -10,35 +10,34 @@
 #                                                                              #
 # **************************************************************************** #
 
-UNAME		:= $(shell uname)
-C_FLAGS		= -O3 -g -DOS -Wall -Wextra -Werror
-LIB_DIR		= ./libft
-HEADER		= srcs/fdf.h
-LIBFT		= $(LIB_DIR)/libft.a
-SRCS		= srcs/fdf.c srcs/Bresenham.c srcs/hooks.c \
-		  srcs/parse.c srcs/coordinates.c srcs/rotation.c \
-		  srcs/math.c srcs/draw.c srcs/free.c srcs/translation.c \
-		  srcs/color.c srcs/projection.c srcs/conic.c
-OBJS		= $(SRCS:.c=.o)
-EXE		= fdf
-RM		= rm -rf
+UNAME			:= $(shell uname)
+# C_FLAGS			= -O3 -g -DOS -Wall -Wextra -Werror
+LIBFT			= libft/libft.a
+HEADER			= $(shell find ./include -name '*.h')
+LIBFT_SRCS		= $(shell find ./libft -name '*.c')
+LIBFT_OBJS		= $(LIBFT_SRCS: .c=.o)
+SRCS			= $(shell find ./src -name '*.c')
+OBJS			= $(SRCS:.c=.o)
+EXE				= fdf
+RM				= rm -rf
 
 # TODO Install mlx and it's dependencies if it's not installed
 
-ifeq ($(UNAME), darwin)
-	MLX = -lmlx -framework OpenGL -framework AppKit
-	OS = MACOS
+ifeq ($(UNAME), Darwin)
+	MLX 	= -lmlx -framework OpenGL -framework AppKit
+	OS		= MACOS
+	C_FLAGS += -DMACOS
 else ifeq ($(UNAME), Linux)
-	# MLX = -I/usr/local/include -L/usr/local/lib -lmlx -lXext -lX11 -lm -lz -lbsd
-	MLX = -Lmlx -lmlx -L/usr/local/lib -lXext -lX11 -lm
-	CC = gcc
-	OS = LINUX
+	MLX		= -Lmlx -lmlx -L/usr/local/lib -lXext -lX11 -lm
+	CC		= gcc
+	C_FLAGS	+= -DLINUX
+	OS		= LINUX
 endif
 
-all: $(LIBFT) $(EXE)
+all: $(EXE)
 
-$(EXE): $(OBJS)
-	$(CC) $(C_FLAGS) $(OBJS) $(LIBFT) $(MLX) -o $@
+$(EXE): $(OBJS) $(LIBFT)
+	$(CC) $(C_FLAGS) $^ $(MLX) -o $@
 	@echo ""
 	@echo "\033[1;36m'fdf' is now ready."
 	@echo "Usage: ./fdf maps/<map>"
@@ -50,7 +49,7 @@ $(EXE): $(OBJS)
 $(LIBFT):
 	@echo "\033[32mCompiling libft"
 	@echo ""
-	$(MAKE) -C $(LIB_DIR)
+	$(MAKE) -C ./libft
 
 clean:
 	@echo "\033[38;2;188;31;54m"
